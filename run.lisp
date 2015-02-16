@@ -2,14 +2,14 @@
 (in-package pconch)
 
 (defun serve (&key port )
-  (setf acceptor (make-instance 'hunchentoot:easy-acceptor :port port)))
+  (make-instance 'hunchentoot:easy-acceptor :port port))
 
 
-(defun setup (&key (port 2125) (root-prefix "/") (acceptor nil acceptor-bound-p))
+(defun setup (&key (port 2125) (root-prefix "/"))
   "Create a default acceptor and bind pconch:app to a function that starts and stops it"
-  (let ((acceptor (serve :port port)))
+  (let ((ac (serve :port port)))
     (setf (symbol-function 'app)
           #'(lambda (cmd)
-              (cond ((equal :start cmd) (hunchentoot:start acceptor))
-                    ((equal :stop  cmd) (hunchentoot:stop  acceptor)))))))
+              (cond ((equal :start cmd) (hunchentoot:start ac))
+                    ((equal :stop  cmd) (hunchentoot:stop  ac)))))))
 
