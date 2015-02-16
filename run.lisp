@@ -4,8 +4,6 @@
 (defun serve (&key port )
   (setf acceptor (make-instance 'hunchentoot:easy-acceptor :port port)))
 
-(defun app (cmd) cmd)
-
 
 (defun setup (&key (port 2125) (root-prefix "/") (acceptor nil acceptor-bound-p))
   "Create a default acceptor and bind pconch:app to a function that starts and stops it"
