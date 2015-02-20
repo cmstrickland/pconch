@@ -1,9 +1,11 @@
 (load "packages.lisp")
 (in-package pconch)
 
+
 (defun serve (&key port prefix)  
   (let ((a (make-instance 'hunchentoot:easy-acceptor :port port)))
-    (hunchentoot:create-prefix-dispatcher prefix 'handler) a))
+    (push (hunchentoot:create-prefix-dispatcher prefix 'handler) hunchentoot:*dispatch-table*)
+    a))
 
 
 (defun setup (&key (port 2125) (root-prefix "/"))
