@@ -1,4 +1,6 @@
 (load "packages.lisp")
+(load "handler.lisp")
+
 (in-package pconch)
 
 
@@ -15,4 +17,5 @@
           #'(lambda (cmd)
               (cond ((equal :start cmd) (hunchentoot:start ac))
                     ((equal :stop  cmd) (hunchentoot:stop  ac)))))))
+
 
