@@ -6,12 +6,14 @@
 
 (defun serve (&key port prefix)  
   (let ((a (make-instance 'hunchentoot:easy-acceptor :port port)))
-    (push (hunchentoot:create-prefix-dispatcher prefix 'handler) hunchentoot:*dispatch-table*)
+    (push (hunchentoot:create-prefix-dispatcher prefix 'handler)
+          hunchentoot:*dispatch-table*)
     a))
 
 
 (defun setup (&key (port 2125) (root-prefix "/"))
-  "Create a default acceptor and bind pconch:app to a function that starts and stops it"
+  "Create a default acceptor and bind pconch:app to a function that
+starts and stops it"
   (let ((ac (serve :port port :prefix root-prefix)))
     (setf (symbol-function 'app)
           #'(lambda (cmd)
