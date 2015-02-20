@@ -1,3 +1,5 @@
 (in-package :pconch)
+(defparameter *prefix* "/blog/")
+(defparameter *port* 2125)
 (defparameter *source-dir* "~/Documents/blog/")
 (defparameter *www-dir* "~/Sites/blog/")

@@ -21,3 +21,11 @@ starts and stops it"
                     ((equal :stop  cmd) (hunchentoot:stop  ac)))))))
 
 
+
+(defun boot ()
+  (handler-case 
+      (app :stop)  (ccl::undefined-function-call () nil)) 
+  (setup :root-prefix *prefix* :port *port*)
+  (app :start))
+
+(boot) 
