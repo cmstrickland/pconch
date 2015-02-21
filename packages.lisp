@@ -1,6 +1,6 @@
-(ql:quickload '(cl-who hunchentoot))
+(ql:quickload '(cl-who hunchentoot puri))
 (defpackage :pconch
   (:use :cl)
-  (:export :app :setup))
+  (:export :app :setup :boot))
 
 
