@@ -9,6 +9,10 @@
         (req-path (uri-path req-uri)))
     (subseq (remove-prefix prefix-path req-path) 0 2)))
 
+(defun target-file-path (category topic)
+  (merge-pathnames
+   (make-pathname  :directory `(:relative ,category) :name topic)
+   *www-dir*))
 (defun handler ()
   (destructuring-bind (category item)
       (decode-path (hunchentoot:request-uri hunchentoot:*request*))
