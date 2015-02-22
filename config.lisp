@@ -3,3 +3,5 @@
 (defparameter *port* 2125)
 (defparameter *source-dir* "~/Documents/blog/")
 (defparameter *www-dir* "~/Sites/blog/")
+(defparameter *source-dir* #p"~/Documents/blog/")
+(defparameter *www-dir* #p"~/Sites/blog/")
