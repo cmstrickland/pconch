@@ -13,8 +13,24 @@
   (merge-pathnames
    (make-pathname  :directory `(:relative ,category) :name topic)
    *www-dir*))
-(defun handler ()
-  (destructuring-bind (category item)
-      (decode-path (hunchentoot:request-uri hunchentoot:*request*))
-    (format nil "Looking up ~a in section ~a" item category)))
 
+(defun valid-resource (path)
+            nil)
+
+(defun serve-resouce (path)
+  (format nil "Serving file ~a" path))
+
+(defun publish-resource (category topic)
+  nil)
+
+(defun serve-resouce-not-found (url)
+  (setf (hunchentoot:return-code*) hunchentoot:+http-not-found+)
+  (format nil "No content found for ~a" url))
+
+(defun handler ()
+  (destructuring-bind (category topic)
+      (decode-path (hunchentoot:request-uri hunchentoot:*request*))
+    (let ((filepath (target-file-path category topic)))
+      (cond ((valid-resource filepath) (serve-resouce filepath))
+            ((publish-resource category topic) (serve-resouce filepath))
+            (t (serve-resouce-not-found (hunchentoot:request-uri hunchentoot:*request*)))))))
