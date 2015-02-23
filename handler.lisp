@@ -17,20 +17,22 @@
 (defun valid-resource (path)
             nil)
 
-(defun serve-resouce (path)
-  (format nil "Serving file ~a" path))
+(defun serve-resource (path)
+  (with-open-file (f path)
+    (read f) (read f)))
 
 (defun publish-resource (category topic)
   nil)
 
-(defun serve-resouce-not-found (url)
+(defun serve-resource-not-found (url)
   (setf (hunchentoot:return-code*) hunchentoot:+http-not-found+)
   (format nil "No content found for ~a" url))
+
 
 (defun handler ()
   (destructuring-bind (category topic)
       (decode-path (hunchentoot:request-uri hunchentoot:*request*))
     (let ((filepath (target-file-path category topic)))
-      (cond ((valid-resource filepath) (serve-resouce filepath))
-            ((publish-resource category topic) (serve-resouce filepath))
-            (t (serve-resouce-not-found (hunchentoot:request-uri hunchentoot:*request*)))))))
+      (cond ((valid-resource filepath) (serve-resource filepath))
+            ((publish-resource category topic) (serve-resource filepath))
+            (t (serve-resource-not-found (hunchentoot:request-uri hunchentoot:*request*)))))))
