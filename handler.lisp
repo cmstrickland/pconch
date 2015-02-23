@@ -14,8 +14,19 @@
    (make-pathname  :directory `(:relative ,category) :name topic)
    *www-dir*))
 
+(defun lookup-meta (key meta)
+  (cdr (assoc key meta)))
+
+(defun resource-stale (f)
+  (let* ((meta (read f))
+         (timestamp (lookup-meta :timestamp meta))
+         (src       (merge-pathnames  (lookup-meta :original  meta)
+                                      *source-dir*)))
+    (> (file-write-date src) timestamp)))
+
 (defun valid-resource (path)
-            nil)
+  (with-open-file (f path :if-does-not-exist nil)
+    (if f (not (resource-stale f)) nil)))
 
 (defun serve-resource (path)
   (with-open-file (f path)
