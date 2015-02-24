@@ -9,10 +9,6 @@
         (req-path (uri-path req-uri)))
     (subseq (remove-prefix prefix-path req-path) 0 2)))
 
-(defun target-file-path (category topic)
-  (merge-pathnames
-   (make-pathname  :directory `(:relative ,category) :name topic)
-   *www-dir*))
 
 (defun lookup-meta (key meta)
   (cdr (assoc key meta)))
@@ -32,12 +28,23 @@
   (with-open-file (f path)
     (read f) (read f)))
 
-(defun publish-resource (category topic)
-  nil)
+(defun publish-file (file path category topic)
+  (let ((meta (pairlis '(:version :original :timestamp) (list 1 path (get-universal-time)))))
+    (with-open-file (of (target-file-path category topic)
+                       :direction :output
+                       :if-exists :supersede)
+      (format t "publish ~a to ~a" meta of)
+      (prin1 meta of)
+      (print  "some content would follow" of))) t)
 
-(defun serve-resource-not-found (url)
-  (setf (hunchentoot:return-code*) hunchentoot:+http-not-found+)
-  (format nil "No content found for ~a" url))
+(defun publish-resource (category topic)
+  (let ((path (source-file-path topic)))
+    (with-open-file (f path :if-does-not-exist nil)
+      (if f (publish-file f path category topic) nil)))
+
+  (defun serve-resource-not-found (url)
+    (setf (hunchentoot:return-code*) hunchentoot:+http-not-found+)
+    (format nil "No content found for ~a" url)))
 
 
 (defun handler ()
