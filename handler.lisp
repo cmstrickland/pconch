@@ -9,28 +9,48 @@
         (req-path (uri-path req-uri)))
     (subseq (remove-prefix prefix-path req-path) 0 2)))
 
-(defun target-file-path (category topic)
-  (merge-pathnames
-   (make-pathname  :directory `(:relative ,category) :name topic)
-   *www-dir*))
+
+(defun lookup-meta (key meta)
+  (cdr (assoc key meta)))
+
+(defun resource-stale (f)
+  (let* ((meta (read f))
+         (timestamp (lookup-meta :timestamp meta))
+         (src       (merge-pathnames  (lookup-meta :original  meta)
+                                      *source-dir*)))
+    (> (file-write-date src) timestamp)))
 
 (defun valid-resource (path)
-            nil)
+  (with-open-file (f path :if-does-not-exist nil)
+    (if f (not (resource-stale f)) nil)))
 
-(defun serve-resouce (path)
-  (format nil "Serving file ~a" path))
+(defun serve-resource (path)
+  (with-open-file (f path)
+    (read f) (read f)))
+
+(defun publish-file (file path category topic)
+  (let ((meta (pairlis '(:version :original :timestamp) (list 1 path (get-universal-time)))))
+    (with-open-file (of (target-file-path category topic)
+                       :direction :output
+                       :if-exists :supersede)
+      (format t "publish ~a to ~a" meta of)
+      (prin1 meta of)
+      (print  "some content would follow" of))) t)
 
 (defun publish-resource (category topic)
-  nil)
+  (let ((path (source-file-path topic)))
+    (with-open-file (f path :if-does-not-exist nil)
+      (if f (publish-file f path category topic) nil)))
 
-(defun serve-resouce-not-found (url)
-  (setf (hunchentoot:return-code*) hunchentoot:+http-not-found+)
-  (format nil "No content found for ~a" url))
+  (defun serve-resource-not-found (url)
+    (setf (hunchentoot:return-code*) hunchentoot:+http-not-found+)
+    (format nil "No content found for ~a" url)))
+
 
 (defun handler ()
   (destructuring-bind (category topic)
       (decode-path (hunchentoot:request-uri hunchentoot:*request*))
     (let ((filepath (target-file-path category topic)))
-      (cond ((valid-resource filepath) (serve-resouce filepath))
-            ((publish-resource category topic) (serve-resouce filepath))
-            (t (serve-resouce-not-found (hunchentoot:request-uri hunchentoot:*request*)))))))
+      (cond ((valid-resource filepath) (serve-resource filepath))
+            ((publish-resource category topic) (serve-resource filepath))
+            (t (serve-resource-not-found (hunchentoot:request-uri hunchentoot:*request*)))))))
