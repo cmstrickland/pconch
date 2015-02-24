@@ -40,11 +40,11 @@
 (defun publish-resource (category topic)
   (let ((path (source-file-path topic)))
     (with-open-file (f path :if-does-not-exist nil)
-      (if f (publish-file f path category topic) nil)))
+      (if f (publish-file f path category topic) nil))))
 
-  (defun serve-resource-not-found (url)
-    (setf (hunchentoot:return-code*) hunchentoot:+http-not-found+)
-    (format nil "No content found for ~a" url)))
+(defun serve-resource-not-found (url)
+  (setf (hunchentoot:return-code*) hunchentoot:+http-not-found+)
+  (format nil "No content found for ~a" url))
 
 
 (defun handler ()
