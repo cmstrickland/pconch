@@ -12,13 +12,14 @@
   (format nil "content ~a~%" line))
 
 (defun read-post (open-file)
-  (let ((post (make-instance 'post)))
-    (loop for line = (read-line open-file nil :EOF)
-       with header = nil
-       until (eq line :EOF)
-       do (cond ((blank-line line) (if header (setf header nil) (setf header t)))
-                (header (setf (headers post) (push  (parse-header line) (headers post))))
-                (t (setf (content post) (concatenate 'string (content post) line))))) post))
+  (loop for line = (read-line open-file nil :EOF)
+     with header = nil
+     with post = (make-instance 'post)
+     finally (return post)
+     until (eq line :EOF)
+     do (cond ((blank-line line) (if header (setf header nil) (setf header t)))
+              (header (setf (headers post) (push  (parse-header line) (headers post))))
+              (t (setf (content post) (concatenate 'string (content post) line))))))
 
 
 (defclass post ()
