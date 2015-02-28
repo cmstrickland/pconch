@@ -29,7 +29,8 @@
     (read f) (read f)))
 
 (defun publish-file (file path category topic)
-  (let ((meta (pairlis '(:version :original :timestamp) (list 1 path (get-universal-time)))))
+  (let ((meta (pairlis '(:version :original :timestamp) (list 1 path (get-universal-time))))
+        (post (read-post file)))
     (with-open-file (of (target-file-path category topic)
                        :direction :output
                        :if-exists :supersede)
