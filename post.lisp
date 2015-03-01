@@ -21,9 +21,12 @@
               (t                  (setf (content post) (concatenate 'string (content post) line))))
      finally (return post)))
 
-
 (defclass post ()
   ((headers :accessor headers :initform nil)
    (content :accessor content :initform nil)))
 
+(defgeneric render (post &optional template))
 
+(defmethod render ((post post) &optional (template "post"))
+  (lquery:$ (initialize (template-path template)))
+  (car (lquery:$ (serialize))))

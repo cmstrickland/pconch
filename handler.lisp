@@ -35,7 +35,7 @@
                         :direction :output
                         :if-exists :supersede)
       (prin1 meta of)
-      (print (content post) of))) t)
+      (print (render post) of))) t)
 
 (defun publish-resource (category topic)
   (let ((path (source-file-path topic)))

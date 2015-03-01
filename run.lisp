@@ -1,6 +1,9 @@
 (load "packages.lisp")
 (load "handler.lisp")
 (load "config.lisp")
+(load "files.lisp")
+(load "post.lisp")
+
 (in-package pconch)
 
 

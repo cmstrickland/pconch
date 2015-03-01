@@ -4,4 +4,5 @@
 (defparameter *source-dir* "~/Documents/blog/")
 (defparameter *www-dir* "~/Sites/blog/")
 (defparameter *source-dir* #p"~/Documents/blog/")
+(defparameter *template-dir* #p "./templates/")
 (defparameter *www-dir* #p"~/Sites/blog/")

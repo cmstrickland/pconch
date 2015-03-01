@@ -9,3 +9,7 @@
 (defun source-file-path (topic)
   (merge-pathnames (make-pathname :directory nil :name topic :type "post")
                    *source-dir*))
+
+(defun template-path (template)
+  (merge-pathnames (make-pathname :directory nil :name template :type "html")
+                   *template-dir*))
