@@ -46,7 +46,6 @@
   (setf (hunchentoot:return-code*) hunchentoot:+http-not-found+)
   (format nil "No content found for ~a" url))
 
-
 (defun handler ()
   (destructuring-bind (category topic)
       (decode-path (hunchentoot:request-uri hunchentoot:*request*))

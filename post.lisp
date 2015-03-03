@@ -29,5 +29,5 @@
 
 (defmethod render ((post post) &optional (template "post"))
   (lquery:$ (initialize (template-path template)))
-  (lquery:$ "div#content > p" (append (content post)))
-  (car (lquery:$ (serialize))))
+  (lquery:$ "div#content > p" (replace-with (content post)))
+  (elt (lquery:$ (serialize)) 0)) 
