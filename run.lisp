@@ -3,6 +3,7 @@
 (load "config.lisp")
 (load "files.lisp")
 (load "post.lisp")
+(load "util.lisp")
 
 (in-package pconch)
 
