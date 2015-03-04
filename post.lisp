@@ -6,7 +6,7 @@
       (eq 0 (count-if #'alpha-char-p line))))
 
 (defun parse-header (line)
-  (format nil "header ~a~%" line))
+  (kvpair (split-string line #\:)))
 
 (defun add-raw-content  (line)
   (format nil "content ~a~%" line))

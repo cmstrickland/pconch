@@ -17,4 +17,8 @@
  return a list of two parts, or nil if the delimiter was 
 not found"
   (let ((i (position ch str)))
-    (if i (list (subseq str 0 i) (subseq str (incf i))))))
+    (if i (cons (subseq str 0 i) (subseq str (incf i))))))
+
+
+(defun kvpair (lst)
+  (cons (intern (string-upcase (car lst)) :keyword) (cdr lst)))
