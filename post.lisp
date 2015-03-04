@@ -1,10 +1,6 @@
 (in-package :pconch)
 
 
-(defun blank-line (line)
-  (or (eq 0 (search ";;" line :end2 2))
-      (eq 0 (count-if #'alpha-char-p line))))
-
 (defun parse-header (line)
   (kvpair (bisect-string line #\:)))
 

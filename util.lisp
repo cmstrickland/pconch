@@ -24,3 +24,6 @@ not found. Character defaults to space unless supplied"
   (cons (intern (string-upcase (car lst)) :keyword)
         (string-trim '(#\Space) (cdr lst))))
 
+(defun blank-line (line)
+  (or (eq 0 (search ";;" line :end2 2))
+      (eq 0 (count-if #'alpha-char-p line))))
