@@ -16,9 +16,13 @@
      with header = nil
      with post = (make-instance 'post)
      until (eq line :EOF) do
-       (cond ((blank-line line)   (if header (setf header nil) (setf header t)))
-              (header             (setf (headers post) (push  (parse-header line) (headers post))))
-              (t                  (setf (content post) (concatenate 'string (content post) line))))
+       (cond ((blank-line line)   (if header
+                                      (setf header nil)
+                                      (setf header t)))
+             (header             (setf (headers post)
+                                       (push  (parse-header line) (headers post))))
+             (t                  (setf (content post)
+                                       (concatenate 'string (content post) line))))
      finally (return post)))
 
 (defclass post ()
