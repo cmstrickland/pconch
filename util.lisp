@@ -12,10 +12,10 @@
                  (remove-prefix (cdr pfx) (cdr lst))))))
 
 
-(defun split-string (str &optional (ch #\Space))
+(defun bisect-string (str &optional (ch #\Space))
   "split a string on first incidence of character
  return a list of two parts, or nil if the delimiter was 
-not found"
+not found. Character defaults to space unless supplied"
   (let ((i (position ch str)))
     (if i (cons (subseq str 0 i) (subseq str (incf i))))))
 
