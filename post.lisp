@@ -30,8 +30,11 @@
    (content :accessor content :initform nil)))
 
 (defgeneric render (post &optional template))
+(defgeneric header (post header))
 
 (defmethod render ((post post) &optional (template "post"))
   (lquery:$ (initialize (template-path template)))
   (lquery:$ "div#content > p" (replace-with (content post)))
   (elt (lquery:$ (serialize)) 0)) 
+(defmethod header ((post post) header)
+  (cdr (assoc header (headers post))))
