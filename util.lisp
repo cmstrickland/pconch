@@ -21,4 +21,6 @@ not found"
 
 
 (defun kvpair (lst)
-  (cons (intern (string-upcase (car lst)) :keyword) (cdr lst)))
+  (cons (intern (string-upcase (car lst)) :keyword)
+        (string-trim '(#\Space) (cdr lst))))
+
