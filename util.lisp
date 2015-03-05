@@ -39,7 +39,7 @@ is a keyword and the cdr is whitespace trimmed"
                              :fill-pointer 0
                              :adjustable t
                              :element-type 'character)
-     with wordlist = nil
+     with wordlist
      counting c into pos
      do (unless (eq c #\,) (vector-push-extend c word))
      do (if (or (eq c #\,) (eq pos (length str)))
