@@ -21,9 +21,13 @@ not found. Character defaults to space unless supplied"
 
 
 (defun kvpair (lst)
+  "convert a cons cell of two strings into a cons cell where the car
+is a keyword and the cdr is whitespace trimmed"
   (cons (intern (string-upcase (car lst)) :keyword)
         (string-trim '(#\Space) (cdr lst))))
 
 (defun blank-line (line)
+  "true if the string provided represents a blank line"
   (or (eq 0 (search ";;" line :end2 2))
       (eq 0 (count-if #'alpha-char-p line))))
+
