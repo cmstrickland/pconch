@@ -9,13 +9,13 @@
 
 (defun read-post (open-file)
   (loop for line = (read-line open-file nil :EOF)
-     with header = nil
+     with in-header = nil
      with post = (make-instance 'post)
      until (eq line :EOF) do
-       (cond ((blank-line line)   (if header
-                                      (setf header nil)
-                                      (setf header t)))
-             (header             (setf (headers post)
+       (cond ((blank-line line)   (if in-header
+                                      (setf in-header nil)
+                                      (setf in-header t)))
+             (in-header             (setf (headers post)
                                        (push  (parse-header line) (headers post))))
              (t                  (setf (content post)
                                        (concatenate 'string (content post) line))))
