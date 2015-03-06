@@ -9,7 +9,7 @@
 
 (defun read-post (open-file)
   (loop for line = (read-line open-file nil :EOF)
-     with in-header = nil
+     with in-header
      with post = (make-instance 'post)
      until (eq line :EOF) do
        (cond ((blank-line line)   (if in-header
