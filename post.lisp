@@ -1,8 +1,11 @@
 (in-package :pconch)
 
-
 (defun parse-header (line)
-  (kvpair (bisect-string line #\:)))
+  (let* ((couple (bisect-string line #\:))
+         (lv (csv-list (cdr couple))))
+    (if (> (length lv) 1)
+        (kvpair (cons (car couple) lv))
+        (kvpair (cons (car couple) (list (cdr couple)))))))
 
 (defun add-raw-content  (line)
   (format nil "content ~a~%" line))

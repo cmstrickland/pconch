@@ -24,7 +24,8 @@ not found. Character defaults to space unless supplied"
   "convert a cons cell of two strings into a cons cell where the car
 is a keyword and the cdr is whitespace trimmed"
   (cons (intern (string-upcase (car lst)) :keyword)
-        (string-trim '(#\Space) (cdr lst))))
+        (mapcar  (lambda (s) (string-trim '(#\Space) s))
+                 (cdr lst))))
 
 (defun blank-line (line)
   "true if the string provided represents a blank line"
