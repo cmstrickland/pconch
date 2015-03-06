@@ -2,9 +2,12 @@
 
 
 (defun uri-path (uri)
+  "returns the path components of a uri string"
   (cdr (puri:uri-parsed-path (puri:parse-uri uri))))
 
 (defun decode-path (req-uri)
+  "removes the prefix path components of a uri string. the prefix path
+is defined in *prefix*"
   (let ((prefix-path (uri-path *prefix*))
         (req-path (uri-path req-uri)))
     (subseq (remove-prefix prefix-path req-path) 0 2)))
