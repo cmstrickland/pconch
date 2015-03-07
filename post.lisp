@@ -37,6 +37,7 @@ followed by at least one blank line, and then some content"
 
 (defgeneric render (post &optional template))
 (defgeneric header (post header))
+(defgeneric on-topic (post category))
 
 (defmethod render ((post post) &optional (template "post"))
   (lquery:$ (initialize (template-path template)))
@@ -46,3 +47,6 @@ followed by at least one blank line, and then some content"
 
 (defmethod header ((post post) header)
   (cdr (assoc header (headers post))))
+
+(defmethod on-topic ((post post) category)
+  t)

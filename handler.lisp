@@ -36,11 +36,12 @@ serveable resource"
 (defun publish-file (file path category topic)
   (let ((meta (pairlis '(:version :original :timestamp) (list 1 path (get-universal-time))))
         (post (read-post file)))
-    (with-open-file (of (target-file-path category topic)
-                        :direction :output
-                        :if-exists :supersede)
-      (prin1 meta of)
-      (print (render post) of))) t)
+    (if (on-topic post category)
+        (with-open-file (of (target-file-path category topic)
+                            :direction :output
+                            :if-exists :supersede)
+          (prin1 meta of)
+          (print (render post) of) t))))
 
 (defun publish-resource (category topic)
   (let ((path (source-file-path topic)))
