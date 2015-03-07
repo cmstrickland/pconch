@@ -24,6 +24,8 @@ is defined in *prefix*"
     (> (file-write-date src) timestamp)))
 
 (defun valid-resource (path)
+  "returns truthily if the requested resource path represents a
+serveable resource"
   (with-open-file (f path :if-does-not-exist nil)
     (if f (not (resource-stale f)) nil)))
 
