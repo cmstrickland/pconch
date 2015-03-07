@@ -37,11 +37,17 @@ serveable resource"
   (let ((meta (pairlis '(:version :original :timestamp) (list 1 path (get-universal-time))))
         (post (read-post file)))
     (if (on-topic post category)
-        (with-open-file (of (target-file-path category topic)
-                            :direction :output
-                            :if-exists :supersede)
-          (prin1 meta of)
-          (print (render post) of) t))))
+        (progn
+          (with-open-file (of (target-file-path category topic)
+                              :direction :output
+                              :if-exists :supersede)
+            (prin1 meta of)
+            (print (render post) of))
+          (mapcar (lambda (f) (link-sub-category f category topic))
+                  (remove-if (lambda (f) (equal f category))
+                             (append (header post :tags)
+                                     (header post :category)))) t)
+        )))
 
 (defun publish-resource (category topic)
   (let ((path (source-file-path topic)))

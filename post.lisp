@@ -49,4 +49,6 @@ followed by at least one blank line, and then some content"
   (cdr (assoc header (headers post))))
 
 (defmethod on-topic ((post post) category)
-  t)
+  (remove-if-not (lambda (f) (equal category f))
+   (append (header post :tags)
+           (header post :category))))
