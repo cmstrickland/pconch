@@ -42,7 +42,7 @@ followed by at least one blank line, and then some content"
 (defmethod render ((post post) &optional (template "post"))
   (lquery:$ (initialize (template-path template)))
   (lquery:$ "div#content > p" (replace-with (content post)))
-  (lquery:$ "h1#post-heading" (text (header post :title)))
+  (lquery:$ "h1#post-heading" (text (first (header post :title))))
   (elt (lquery:$ (serialize)) 0))
 
 (defmethod header ((post post) header)
