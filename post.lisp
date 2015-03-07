@@ -2,10 +2,12 @@
 
 (defun parse-header (line)
   (let* ((couple (bisect-string line #\:))
-         (lv (csv-list (cdr couple))))
+         (k (car couple))
+         (v (cdr couple))
+         (lv (csv-list v)))
     (if (> (length lv) 1)
-        (kvpair (cons (car couple) lv))
-        (kvpair (cons (car couple) (list (cdr couple)))))))
+        (kvpair (cons k lv))
+        (kvpair (cons k (list v))))))
 
 (defun add-raw-content  (line)
   (format nil "content ~a~%" line))
