@@ -24,14 +24,16 @@ followed by at least one blank line, and then some content"
      initially (push (cons :filename (list (file-namestring open-file)))
                      (headers post))
      until (eq line :EOF) do
-       (cond ((blank-line line)   (if in-header
+       (cond ((blank-line line)     (if in-header
                                       (setf in-header nil)
                                       (setf in-header t)))
              (in-header             (setf (headers post)
-                                       (push  (parse-header line) (headers post))))
-             (t                  (setf (content post)
-                                       (concatenate 'string (content post) line))))
+                                           (push  (parse-header line) (headers post))))
+             (t                     (setf (content post)
+                                          (concatenate 'string (content post) line))))
      finally (return post)))
+
+
 
 (defclass post ()
   ((headers :accessor headers :initform nil)
