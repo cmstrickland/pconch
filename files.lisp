@@ -18,7 +18,8 @@ specified by subcat and topic, using unix hard links"
   (let ((src (target-file-path cat topic))
         (dst (target-file-path subcat topic)))
     (ensure-directories-exist (category-dir subcat))
-    (osicat:make-link dst :target src :hard t)))
+    (handler-case
+        (osicat:make-link dst :target src :hard t) (OSICAT-POSIX:EEXIST () nil))))
 
 (defun source-file-path (topic)
   "return the path to the source file for a given topic name"
