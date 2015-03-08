@@ -21,6 +21,8 @@ followed by at least one blank line, and then some content"
   (loop for line = (read-line open-file nil :EOF)
      with in-header
      with post = (make-instance 'post)
+     initially (push (cons :filename (list (file-namestring open-file)))
+                     (headers post))
      until (eq line :EOF) do
        (cond ((blank-line line)   (if in-header
                                       (setf in-header nil)
