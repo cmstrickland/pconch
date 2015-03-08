@@ -60,10 +60,28 @@ serveable resource"
   (setf (hunchentoot:return-code*) hunchentoot:+http-not-found+)
   (format nil "No content found for ~a" url))
 
+(defun summarize-post (p)
+  (and (eq (osicat:file-kind p) :regular-file)
+       (with-open-file (f p)
+         (let ((post (read-post f)))
+           (format nil "<li> <a href=\"~a\">~a</a> </li>" (url post) (title post))))))
+
+(defun serve-index (&optional category)
+  (let ((posts (osicat:list-directory *source-dir*)))
+    (lquery:$ (initialize (template-path "index"))
+              "ul#index-list > li" (replace-with
+                                    (reduce (lambda (a b) (concatenate 'string a b))
+                                            (mapcar #'summarize-post posts))))
+    (elt (lquery:$ (serialize)) 0)))
+
 (defun handler ()
-  (destructuring-bind (category topic)
+  (destructuring-bind (&optional category topic)
       (decode-path (hunchentoot:request-uri hunchentoot:*request*))
-    (let ((filepath (target-file-path category topic)))
-      (cond ((valid-resource filepath) (serve-resource filepath))
-            ((publish-resource category topic) (serve-resource filepath))
-            (t (serve-resource-not-found (hunchentoot:request-uri hunchentoot:*request*)))))))
+    (cond
+      ((null category) (serve-index))
+      ((and (null category)
+            (or (null topic) (equal "" topic))) (serve-index category))
+      (t (let ((filepath (target-file-path category topic)))
+           (cond ((valid-resource filepath) (serve-resource filepath))
+                 ((publish-resource category topic) (serve-resource filepath))
+                 (t (serve-resource-not-found (hunchentoot:request-uri hunchentoot:*request*)))))))))

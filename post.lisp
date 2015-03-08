@@ -40,6 +40,26 @@ followed by at least one blank line, and then some content"
 (defgeneric render (post &optional template))
 (defgeneric header (post header))
 (defgeneric on-topic (post category))
+(defgeneric title (post))
+(defgeneric url   (post))
+(defgeneric resource-name (post))
+
+(defmethod resource-name ((post post))
+  (first (bisect-string (first (header post :filename)) #\.)))
+
+(defmethod title ((post post))
+  (first (header post :title)))
+
+(defmethod url ((post post))
+  (let ((base-url (puri:parse-uri *base*)))
+    (setf (puri:uri-path base-url)
+          (concatenate 'string
+                       *prefix*
+                       (namestring
+                        (make-pathname :directory
+                                       `(:relative  ,(first (header post :tags))) 
+                                       :name (resource-name post)))))
+    (format nil "~a" base-url)))
 
 (defmethod render ((post post) &optional (template "post"))
   (lquery:$ (initialize (template-path template)))
