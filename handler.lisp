@@ -8,9 +8,11 @@
 (defun decode-path (req-uri)
   "removes the prefix path components of a uri string. the prefix path
 is defined in *prefix*"
-  (let ((prefix-path (uri-path *prefix*))
-        (req-path (uri-path req-uri)))
-    (subseq (remove-prefix prefix-path req-path) 0 2)))
+  (let* ((prefix-path (uri-path *prefix*))
+         (req-path (uri-path req-uri))
+         (path (remove-prefix prefix-path req-path)))
+    (if path
+        (subseq path 0 (min (length path) 2)))))
 
 
 (defun lookup-meta (key meta)
