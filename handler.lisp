@@ -62,21 +62,25 @@ serveable resource"
 
 
 
-(defun build-index ()
-  (sort
-   (mapcar (lambda (f)
-             (with-open-file (p f)
-               (read-post p)))
-           (remove-if-not (lambda (f) (eq (osicat:file-kind f) :regular-file))
-                          (osicat:list-directory *source-dir*)))
-   #'string>
-   :key (lambda (f) (car (header f :date)))))
+(defun build-index (&optional category)
+  (let ((posts
+         (sort
+          (mapcar (lambda (f)
+                    (with-open-file (p f)
+                      (read-post p)))
+                  (remove-if-not (lambda (f) (eq (osicat:file-kind f) :regular-file))
+                                 (osicat:list-directory *source-dir*)))
+          #'string>
+          :key (lambda (f) (car (header f :date))))))
+    (if category
+        (remove-if-not (lambda (f) (on-topic f category)) posts)
+        posts)))
 
 (defun serve-index (&optional category)
   (lquery:$ (initialize (template-path "index"))
             "ul#index-list > li" (replace-with
                                   (reduce (lambda (a b) (concatenate 'string a b))
-                                          (mapcar #'summary (build-index)))))
+                                          (mapcar #'summary (build-index category)))))
   (elt (lquery:$ (serialize)) 0))
 
 (defun handler ()
