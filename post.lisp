@@ -15,7 +15,7 @@ header followed by strings of all the header values "
   (format nil "content ~a~%" line))
 
 (defun read-post (open-file)
-  "parse a .post file 
+  "parse a .post file
 expect a series of headers being a line with a heading and a :
 followed by at least one blank line, and then some content"
   (loop for line = (read-line open-file nil :EOF)
