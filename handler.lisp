@@ -60,11 +60,7 @@ serveable resource"
   (setf (hunchentoot:return-code*) hunchentoot:+http-not-found+)
   (format nil "No content found for ~a" url))
 
-(defun summarize-post (path)
-  (and (eq (osicat:file-kind path) :regular-file)
-       (with-open-file (f path)
-         (let ((post (read-post f)))
-           (format nil "<li> <a href=\"~a\">~a</a> </li>" (url post) (title post))))))
+
 
 (defun build-index ()
   (sort
