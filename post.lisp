@@ -61,7 +61,7 @@ followed by at least one blank line, and then some content"
                        *prefix*
                        (namestring
                         (make-pathname :directory
-                                       `(:relative  ,(first (header post :tags))) 
+                                       `(:relative  ,(first (header post :tags)))
                                        :name (resource-name post)))))
     (format nil "~a" base-url)))
 
