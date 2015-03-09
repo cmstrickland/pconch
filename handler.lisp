@@ -60,27 +60,38 @@ serveable resource"
   (setf (hunchentoot:return-code*) hunchentoot:+http-not-found+)
   (format nil "No content found for ~a" url))
 
-(defun summarize-post (p)
-  (and (eq (osicat:file-kind p) :regular-file)
-       (with-open-file (f p)
+(defun summarize-post (path)
+  (and (eq (osicat:file-kind path) :regular-file)
+       (with-open-file (f path)
          (let ((post (read-post f)))
            (format nil "<li> <a href=\"~a\">~a</a> </li>" (url post) (title post))))))
 
+(defun build-index ()
+  (sort
+   (mapcar (lambda (f)
+             (with-open-file (p f)
+               (read-post p)))
+           (remove-if-not (lambda (f) (eq (osicat:file-kind f) :regular-file))
+                          (osicat:list-directory *source-dir*)))
+   #'string>
+   :key (lambda (f) (car (header f :date)))))
+
 (defun serve-index (&optional category)
-  (let ((posts (osicat:list-directory *source-dir*)))
-    (lquery:$ (initialize (template-path "index"))
-              "ul#index-list > li" (replace-with
-                                    (reduce (lambda (a b) (concatenate 'string a b))
-                                            (mapcar #'summarize-post posts))))
-    (elt (lquery:$ (serialize)) 0)))
+  (lquery:$ (initialize (template-path "index"))
+            "ul#index-list > li" (replace-with
+                                  (reduce (lambda (a b) (concatenate 'string a b))
+                                          (mapcar #'summary (build-index)))))
+  (elt (lquery:$ (serialize)) 0))
 
 (defun handler ()
   (destructuring-bind (&optional category topic)
       (decode-path (hunchentoot:request-uri hunchentoot:*request*))
     (cond
       ((null category) (serve-index))
-      ((and (null category)
+
+      ((and category
             (or (null topic) (equal "" topic))) (serve-index category))
+
       (t (let ((filepath (target-file-path category topic)))
            (cond ((valid-resource filepath) (serve-resource filepath))
                  ((publish-resource category topic) (serve-resource filepath))
