@@ -62,6 +62,7 @@ serveable resource"
 
 
 (defun index-all-posts ()
+  "build a sorted list of post objects for every post in the source directory"
   (sort
    (mapcar (lambda (f)
              (with-open-file (p f)
@@ -72,12 +73,14 @@ serveable resource"
    :key (lambda (f) (car (header f :date)))))
 
 (defun build-index (&optional category)
+  "build an sorted index of posts, perhaps filtered by a category / tag "
   (let ((posts (index-all-posts)))
     (if category
         (remove-if-not (lambda (f) (on-topic f category)) posts)
         posts)))
 
 (defun serve-index (&optional category)
+  "serve an index page"
   (let ((index (build-index category)))
     (if index
         (progn
