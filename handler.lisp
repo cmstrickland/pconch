@@ -78,11 +78,15 @@ serveable resource"
         posts)))
 
 (defun serve-index (&optional category)
-  (lquery:$ (initialize (template-path "index"))
-            "ul#index-list > li" (replace-with
-                                  (reduce (lambda (a b) (concatenate 'string a b))
-                                          (mapcar #'summary (build-index category)))))
-  (elt (lquery:$ (serialize)) 0))
+  (let ((index (build-index category)))
+    (if index
+        (progn
+          (lquery:$ (initialize (template-path "index"))
+                    "ul#index-list > li" (replace-with
+                                          (reduce (lambda (a b) (concatenate 'string a b))
+                                                  (mapcar #'summary index))))
+          (elt (lquery:$ (serialize)) 0))
+        (serve-resource-not-found category))))
 
 (defun handler ()
   (destructuring-bind (&optional category topic)
