@@ -61,17 +61,18 @@ serveable resource"
   (format nil "No content found for ~a" url))
 
 
+(defun index-all-posts ()
+  (sort
+   (mapcar (lambda (f)
+             (with-open-file (p f)
+               (read-post p)))
+           (remove-if-not (lambda (f) (eq (osicat:file-kind f) :regular-file))
+                          (osicat:list-directory *source-dir*)))
+   #'string>
+   :key (lambda (f) (car (header f :date)))))
 
 (defun build-index (&optional category)
-  (let ((posts
-         (sort
-          (mapcar (lambda (f)
-                    (with-open-file (p f)
-                      (read-post p)))
-                  (remove-if-not (lambda (f) (eq (osicat:file-kind f) :regular-file))
-                                 (osicat:list-directory *source-dir*)))
-          #'string>
-          :key (lambda (f) (car (header f :date))))))
+  (let ((posts (index-all-posts)))
     (if category
         (remove-if-not (lambda (f) (on-topic f category)) posts)
         posts)))
