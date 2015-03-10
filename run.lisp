@@ -9,10 +9,10 @@
 
 
 (defun serve (&key port prefix)  
-  (let ((a (make-instance 'hunchentoot:easy-acceptor :port port)))
+  (let ((acceptor (make-instance 'hunchentoot:easy-acceptor :port port)))
     (push (hunchentoot:create-prefix-dispatcher prefix 'handler)
           hunchentoot:*dispatch-table*)
-    a))
+    acceptor))
 
 
 (defun setup (&key (port 2125) (root-prefix "/"))
