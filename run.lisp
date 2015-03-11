@@ -15,6 +15,8 @@
     acceptor))
 
 
+;; build an 'app defun that takes :start and :stop args
+;; to start/stop the service
 (defun setup (&key (port 2125) (root-prefix "/"))
   "Create a default acceptor and bind pconch:app to a function that
 starts and stops it"
@@ -27,9 +29,11 @@ starts and stops it"
 
 
 (defun boot ()
+  "stop the app if it's running, then start it up"
   (handler-case 
       (app :stop)  (ccl::undefined-function-call () nil)) 
   (setup :root-prefix *prefix* :port *port*)
   (app :start))
 
+;; start it up
 (boot) 
