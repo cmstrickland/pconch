@@ -7,3 +7,4 @@
 (defparameter *source-dir* #p"~/Documents/blog/")
 (defparameter *template-dir* #p "./templates/")
 (defparameter *www-dir* #p"~/Sites/blog/")
+(defparameter *index-pager* 20)
