@@ -94,7 +94,7 @@ serveable resource"
 (defun handler ()
   (destructuring-bind (&optional category topic)
       (decode-path (hunchentoot:request-uri hunchentoot:*request*))
-    (if topic
+    (if (not (empty topic))
         (let ((filepath (target-file-path category topic)))
           (cond ((valid-resource filepath) (serve-resource filepath))
                 ((publish-resource category topic) (serve-resource filepath))

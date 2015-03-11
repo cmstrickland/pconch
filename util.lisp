@@ -48,3 +48,7 @@ is a keyword and the cdr is whitespace trimmed"
               (push (string-trim '(#\Space) word) wordlist)
               (setf (fill-pointer word) 0)))
      finally (return (reverse wordlist))))
+
+(defun empty (thing)
+  (or (not thing)
+      (equal "" thing)))
