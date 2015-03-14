@@ -90,6 +90,7 @@ serveable resource"
     (if (< a z)
         (list a z))))
 
+
 (defun serve-index (&optional category)
   "serve an index page"
   (let ((range (compute-range (hunchentoot:get-parameters* hunchentoot:*request*))))
@@ -97,15 +98,17 @@ serveable resource"
       (hunchentoot::redirect  (concatenate 'string (hunchentoot:script-name*)
                                            (format nil "?start=0&end=~a" *index-pager*))
                                :code 301))
-    (let ((index (build-index category)))
     (let* ((index (build-index category))
           (range (truncate-range range (length index))))
       (if index
           (progn
             (lquery:$ (initialize (template-path "index"))
-                      "ul#index-list > li" (replace-with
-                                            (reduce (lambda (a b) (concatenate 'string a b))
-                                                    (mapcar #'summary (subseq index (car range) (cadr range))))))
+                      "ul#index-list > li"
+                      (replace-with (reduce
+                                     (lambda (a b) (concatenate 'string a b))
+                                     (mapcar
+                                      #'summary
+                                      (subseq index (car range) (cadr range))))))
             (elt (lquery:$ (serialize)) 0))
           (serve-resource-not-found category)))))
 
