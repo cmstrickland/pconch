@@ -53,3 +53,8 @@ is a keyword and the cdr is whitespace trimmed"
   (or (not thing)
       (equal "" thing)
       (equal "index" thing)))
+
+(defun truncate-range (range limit)
+  (if (> (cadr range) limit)
+      (list (car range) limit)
+      range))

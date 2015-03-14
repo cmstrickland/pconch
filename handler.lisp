@@ -98,6 +98,8 @@ serveable resource"
                                            (format nil "?start=0&end=~a" *index-pager*))
                                :code 301))
     (let ((index (build-index category)))
+    (let* ((index (build-index category))
+          (range (truncate-range range (length index))))
       (if index
           (progn
             (lquery:$ (initialize (template-path "index"))
