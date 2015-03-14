@@ -78,17 +78,34 @@ serveable resource"
         (remove-if-not (lambda (f) (on-topic f category)) posts)
         posts)))
 
+(defun compute-range (params)
+  (let ((start (cdr (assoc "start" params :test #'equal)))
+        (end   (cdr (assoc "end" params :test #'equal)))
+        (a 0)
+        (z 0))
+    (if start
+        (setf a (or (parse-integer start :junk-allowed t) 0)))
+    (if end
+        (setf z (or (parse-integer end :junk-allowed t) 0)))
+    (if (< a z)
+        (list a z))))
+
 (defun serve-index (&optional category)
   "serve an index page"
-  (let ((index (build-index category)))
-    (if index
-        (progn
-          (lquery:$ (initialize (template-path "index"))
-                    "ul#index-list > li" (replace-with
-                                          (reduce (lambda (a b) (concatenate 'string a b))
-                                                  (mapcar #'summary index))))
-          (elt (lquery:$ (serialize)) 0))
-        (serve-resource-not-found category))))
+  (let ((range (compute-range (hunchentoot:get-parameters* hunchentoot:*request*))))
+    (unless range
+      (hunchentoot::redirect  (concatenate 'string (hunchentoot:script-name*)
+                                           (format nil "?start=0&end=~a" *index-pager*))
+                               :code 301))
+    (let ((index (build-index category)))
+      (if index
+          (progn
+            (lquery:$ (initialize (template-path "index"))
+                      "ul#index-list > li" (replace-with
+                                            (reduce (lambda (a b) (concatenate 'string a b))
+                                                    (mapcar #'summary (subseq index (car range) (cadr range))))))
+            (elt (lquery:$ (serialize)) 0))
+          (serve-resource-not-found category)))))
 
 (defun handler ()
   (destructuring-bind (&optional category topic)
