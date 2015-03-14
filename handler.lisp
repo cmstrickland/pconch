@@ -48,8 +48,7 @@ serveable resource"
           (mapcar (lambda (f) (link-sub-category f category topic))
                   (remove-if (lambda (f) (equal f category))
                              (append (header post :tags)
-                                     (header post :category)))) t)
-        )))
+                                     (header post :category)))) t))))
 
 (defun publish-resource (category topic)
   (let ((path (source-file-path topic)))
