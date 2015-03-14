@@ -75,7 +75,7 @@ serveable resource"
 (defun build-index (&optional category)
   "build an sorted index of posts, perhaps filtered by a category / tag "
   (let ((posts (index-all-posts)))
-    (if category
+    (if (not (empty-subject category))
         (remove-if-not (lambda (f) (on-topic f category)) posts)
         posts)))
 
@@ -94,7 +94,7 @@ serveable resource"
 (defun handler ()
   (destructuring-bind (&optional category topic)
       (decode-path (hunchentoot:request-uri hunchentoot:*request*))
-    (if (not (empty topic))
+    (if (not (empty-subject topic))
         (let ((filepath (target-file-path category topic)))
           (cond ((valid-resource filepath) (serve-resource filepath))
                 ((publish-resource category topic) (serve-resource filepath))

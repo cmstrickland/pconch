@@ -49,6 +49,7 @@ is a keyword and the cdr is whitespace trimmed"
               (setf (fill-pointer word) 0)))
      finally (return (reverse wordlist))))
 
-(defun empty (thing)
+(defun empty-subject (thing)
   (or (not thing)
-      (equal "" thing)))
+      (equal "" thing)
+      (equal "index" thing)))
