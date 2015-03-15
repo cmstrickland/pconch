@@ -80,9 +80,8 @@ serveable resource"
 
 (defun compute-range (params)
   (let ((start (cdr (assoc "start" params :test #'equal)))
-        (end   (cdr (assoc "end" params :test #'equal)))
-        (a 0)
-        (z 0))
+        (end   (cdr (assoc "end"   params :test #'equal)))
+        (a 0)  (z 0))
     (if start
         (setf a (or (parse-integer start :junk-allowed t) 0)))
     (if end
