@@ -106,6 +106,18 @@ serveable resource"
     (if (< a z)
         (list a z))))
 
+(defmacro index-paginator (kind)
+  `(if ,kind
+       (lquery:$ (inline  (concatenate 'string "div#paginator > ul > li#"
+                                       (symbol-name ',kind) "> a"))
+                 (attr "href"
+                       (concatenate 'string
+                                    (hunchentoot:script-name*)
+                                    (format nil "?start=~a&end=~a"
+                                            (car ,kind) (cadr ,kind)))))
+       (lquery:$ (inline  (concatenate 'string  "div#paginator > ul > li#"
+                                       (symbol-name ',kind))) (remove))))
+
 (defun serve-index (&optional category)
   "serve an index page"
   (let ((range (compute-range (hunchentoot:get-parameters* hunchentoot:*request*))))
@@ -129,14 +141,8 @@ serveable resource"
                                       (subseq index (car range) (cadr range))))))
             (if category
                 (lquery:$ "title" (text (format nil "Index of ~a" category))))
-            (if next
-                (lquery:$ "div#paginator > ul > li#next > a"
-                          (attr "href"
-                                (concatenate 'string
-                                             (hunchentoot:script-name*)
-                                             (format nil "?start=~a&end=~a"
-                                                     (car next) (cadr next)))))
-                (lquery:$ "div#paginator > ul > li#next" (remove)))
+            (index-paginator next)
+            (index-paginator prev)
             (elt (lquery:$ (serialize)) 0))
           (serve-resource-not-found category)))))
 
