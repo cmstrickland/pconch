@@ -115,7 +115,10 @@ serveable resource"
                                            (format nil "?start=0&end=~a" *index-pager*))
                                :code 301))
     (let* ((index (build-index category))
-          (range (truncate-range range (length index))))
+           (index-length (length index))
+           (range (truncate-range range index-length))
+           (prev  (compute-prev range))
+           (next  (compute-next range index-length)))
       (if index
           (progn
             (lquery:$ (initialize (template-path "index"))
@@ -125,6 +128,16 @@ serveable resource"
                                      (mapcar
                                       #'summary
                                       (subseq index (car range) (cadr range))))))
+            (if category
+                (lquery:$ "title" (text (format nil "Index of ~a" category))))
+            (if next
+                (lquery:$ "div#paginator > ul > li#next > a"
+                          (attr "href"
+                                (concatenate 'string
+                                             (hunchentoot:script-name*)
+                                             (format nil "?start=~a&end=~a"
+                                                     (car next) (cadr next)))))
+                (lquery:$ "div#paginator > ul > li#next" (remove)))
             (elt (lquery:$ (serialize)) 0))
           (serve-resource-not-found category)))))
 
