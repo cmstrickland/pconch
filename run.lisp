@@ -4,6 +4,7 @@
 (load "files.lisp")
 (load "post.lisp")
 (load "util.lisp")
+(load "range.lisp")
 
 (in-package pconch)
 
