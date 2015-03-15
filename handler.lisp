@@ -90,6 +90,22 @@ serveable resource"
     (if (< a z)
         (list a z))))
 
+(defun compute-next (range &optional max (step *index-pager*))
+  (let ((a (cadr range))
+        (z (+ step (cadr range))))
+    (if (< a max)
+        (progn
+          (if (< max z)
+              (setf z max))
+          (list a z)))))
+
+(defun compute-prev (range &optional (min 0) (step *index-pager*))
+  (let ((a (- (car range) step))
+        (z (car range)))
+    (if (< a min)
+        (setf a min))
+    (if (< a z)
+        (list a z))))
 
 (defun serve-index (&optional category)
   "serve an index page"
