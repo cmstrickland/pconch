@@ -2,6 +2,8 @@
 ;; they're a list of two integers, representing the start and end of a
 ;; slice of an index
 
+(in-package :pconch)
+
 (defun compute-range (params)
   (let ((start (cdr (assoc "start" params :test #'equal)))
         (end   (cdr (assoc "end"   params :test #'equal)))
