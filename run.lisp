@@ -1,6 +1,6 @@
 (load "packages.lisp")
-(load "handler.lisp")
 (load "config.lisp")
+(load "handler.lisp")
 (load "files.lisp")
 (load "post.lisp")
 (load "util.lisp")
