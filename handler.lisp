@@ -106,7 +106,8 @@ serveable resource"
       (if index
           (progn
             (lquery:$ (initialize (template-path "index"))
-                      "ul#index-list > li"
+                      "h1#page-heading" (text "beatworm.co.uk"))
+            (lquery:$ "ul#index-list > li"
                       (replace-with (reduce
                                      (lambda (a b) (concatenate 'string a b))
                                      (mapcar
