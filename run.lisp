@@ -5,6 +5,7 @@
 (load "post.lisp")
 (load "util.lisp")
 (load "range.lisp")
+(load "plump.lisp")
 
 (in-package pconch)
 
