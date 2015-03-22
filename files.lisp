@@ -30,3 +30,6 @@ specified by subcat and topic, using unix hard links"
   "return the path to the named template file"
   (merge-pathnames (make-pathname :directory nil :name template :type "html")
                    *template-dir*))
+
+(defun stylesheet-path ()
+  (merge-pathnames (make-pathname :directory '(:relative "styles")) *template-dir*))

@@ -50,7 +50,7 @@ followed by at least one blank line, and then some content"
 (defgeneric summary (post))
 
 (defmethod summary ((post post))
-  (format nil "<li> <a href=\"~a\">~a</a> </li>" (url post) (title post)))
+  (format nil "<li> ~a </li>" (content post)))
 (defmethod resource-name ((post post))
   (first (bisect-string (first (header post :filename)) #\.)))
 

@@ -22,6 +22,7 @@
 (defun setup (&key (port 2125) (root-prefix "/"))
   "Create a default acceptor and bind pconch:app to a function that
 starts and stops it"
+  (push  (hunchentoot:create-folder-dispatcher-and-handler "/static/styles/" (stylesheet-path) "text/css" ) hunchentoot:*dispatch-table*)
   (let ((ac (serve :port port :prefix root-prefix)))
     (setf (symbol-function 'app)
           #'(lambda (cmd)
