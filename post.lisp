@@ -48,14 +48,25 @@ followed by at least one blank line, and then some content"
 (defgeneric url   (post))
 (defgeneric resource-name (post))
 (defgeneric summary (post))
+(defgeneric post-type (post))
 
 (defmethod summary ((post post))
-  (format nil "<li> ~a </li>" (content post)))
+  (let ((type (post-type post)))
+    (cond
+      ((equal type 'link-post )
+       (format nil "<li class=\"~a\"d> ~a </li>" (post-type post) (content post)))
+      (t
+       (format nil "<li class=\"~a\"d> <h2>~a</h2> ~a </li>"  (post-type post) (title post) (content post))))))
 (defmethod resource-name ((post post))
   (first (bisect-string (first (header post :filename)) #\.)))
 
 (defmethod title ((post post))
   (first (header post :title)))
+
+(defmethod post-type ((post post))
+  (cond
+    ((find "links" (append (header post :tags) (header post :category)) :test #'string-equal ) 'link-post)
+    (t 'post)))
 
 (defmethod url ((post post))
   (let ((base-url (puri:parse-uri *base*)))
