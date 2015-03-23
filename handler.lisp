@@ -66,8 +66,9 @@ serveable resource"
    (mapcar (lambda (f)
              (with-open-file (p f)
                (read-post p)))
-           (remove-if-not (lambda (f) (eq (osicat:file-kind f) :regular-file))
-                          (osicat:list-directory *source-dir*)))
+           (remove-if (lambda (f) (string-ends-with (namestring f) #\~))
+                      (remove-if-not (lambda (f) (eq (osicat:file-kind f) :regular-file))
+                                     (osicat:list-directory *source-dir*))))
    #'string>
    :key (lambda (f) (car (header f :date)))))
 
