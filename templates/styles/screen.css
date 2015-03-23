@@ -1,11 +1,12 @@
-html, body { background-color:grey ;
+html, body { background-color:gray ;
              font-family: Helvetica, sans-serif;}
 
 #header { width:52em; background-color: white;
           margin-top: -0.4em;
           padding-right:1em;}
 
-h1 { padding-left: 1em; padding-bottom: 0;}
+h1 { padding-left: 0.5em;
+     padding-bottom: 0; }
 
 #page-content { background-color:white;
                 width: 52em;
@@ -15,8 +16,25 @@ h1 { padding-left: 1em; padding-bottom: 0;}
                 padding-top: 1em;
                 padding-right: 1em;
                 padding-bottom: 1em;
-                border: 2px solid black;
-              }
+                border: 2px solid black; }
 
 #index-list { margin-left: 1em; 
-              margin-right: 2em;}
+              margin-right: 2em; }
+
+#index-list > li { list-style-type: none; 
+                   margin-left: -1em; }
+
+#index-list > li > h2 { margin-left: -0.5em;
+                        border-bottom: 1px solid #cccccc }
+
+li.LINK-POST { font-size: 0.5em;
+               padding-left: 1em; }
+
+li.POST { padding-top: 1em;
+          padding-bottom: 1em; }
+
+.POST > blockquote { background-color: #efeeef;
+                     color: gray;
+                     font-size:smaller;
+                     margin: 0em 2em 0em 2em;
+                     padding: 0em 1em 0em 1em; }
