@@ -29,8 +29,8 @@ is a keyword and the cdr is whitespace trimmed"
 
 (defun blank-line (line)
   "true if the string provided represents a blank line"
-  (or (eq 0 (search ";;" line :end2 2))
-      (eq 0 (count-if #'alpha-char-p line))))
+  (or (eq 0 (count-if #'alpha-char-p line))
+      (eq 0 (search ";;" line :end2 2))))
 
 
 (defun csv-list (str)
