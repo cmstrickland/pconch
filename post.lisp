@@ -54,9 +54,12 @@ followed by at least one blank line, and then some content"
   (let ((type (post-type post)))
     (cond
       ((equal type 'link-post )
-       (format nil "<li class=\"~a\"d> ~a </li>" (post-type post) (content post)))
+       (format nil "<li class=\"~a\"d> ~a </li>"
+               (post-type post) (content post)))
       (t
-       (format nil "<li class=\"~a\"d> <h2>~a</h2> ~a </li>"  (post-type post) (title post) (content post))))))
+       (format nil "<li class=\"~a\"d> <h2>~a</h2> ~a </li>"
+               (post-type post) (title post) (content post))))))
+
 (defmethod resource-name ((post post))
   (first (bisect-string (first (header post :filename)) #\.)))
 
@@ -65,7 +68,9 @@ followed by at least one blank line, and then some content"
 
 (defmethod post-type ((post post))
   (cond
-    ((find "links" (append (header post :tags) (header post :category)) :test #'string-equal ) 'link-post)
+    ((find "links" (append (header post :tags)
+                           (header post :category))
+           :test #'string-equal ) 'link-post)
     (t 'post)))
 
 (defmethod url ((post post))
