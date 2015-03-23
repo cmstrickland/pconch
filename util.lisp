@@ -58,3 +58,6 @@ is a keyword and the cdr is whitespace trimmed"
   (if (> (cadr range) limit)
       (list (car range) limit)
       range))
+
+(defun string-ends-with (str ch)
+  (and str (eq ch (elt str (- (length str) 1)))))
