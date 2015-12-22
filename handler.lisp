@@ -12,7 +12,7 @@ is defined in *prefix*"
          (req-path (uri-path req-uri))
          (path (remove-prefix prefix-path req-path)))
     (if path
-        (subseq path 0 (min (length path) 2)))))
+        (subseq path 0 (min (length path) 3)))))
 
 
 (defun lookup-meta (key meta)
@@ -122,7 +122,7 @@ serveable resource"
           (serve-resource-not-found category)))))
 
 (defun handler ()
-  (destructuring-bind (&optional category topic)
+  (destructuring-bind (&optional category topic content-type)
       (decode-path (hunchentoot:request-uri hunchentoot:*request*))
     (if (not (empty-subject topic))
         (let ((filepath (target-file-path category topic)))
