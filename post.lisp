@@ -65,7 +65,7 @@ followed by at least one blank line, and then some content"
 
 (defmethod title ((post post))
   (or  (first (header post :title))
-       "Untitled post"))
+       "Untitled"))
 
 (defmethod post-type ((post post))
   (cond
