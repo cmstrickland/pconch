@@ -67,8 +67,7 @@ serveable resource"
              (with-open-file (p f)
                (read-post p)))
            (remove-if (lambda (f) (string-ends-with (namestring f) #\~))
-                      (remove-if-not (lambda (f) (eq (osicat:file-kind f) :regular-file))
-                                     (osicat:list-directory *source-dir*))))
+                      (uiop:directory-files *source-dir*)))
    #'string>
    :key (lambda (f) (car (header f :date)))))
 
