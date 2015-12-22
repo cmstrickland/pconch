@@ -12,14 +12,17 @@ specified category"
    (make-pathname  :directory `(:relative ,category) :name topic)
    *www-dir*))
 
+(defun hard-link (src dst)
+  (handler-case
+      (osicat:make-link dst :target src :hard t) (OSICAT-POSIX:EEXIST () nil)))
+
 (defun link-sub-category (subcat cat topic)
   "link the resource specified by category and topic to the resource
 specified by subcat and topic, using unix hard links"
   (let ((src (target-file-path cat topic))
         (dst (target-file-path subcat topic)))
     (ensure-directories-exist (category-dir subcat))
-    (handler-case
-        (osicat:make-link dst :target src :hard t) (OSICAT-POSIX:EEXIST () nil))))
+    (hard-link src dst)))
 
 (defun source-file-path (topic)
   "return the path to the source file for a given topic name"
