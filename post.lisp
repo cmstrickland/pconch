@@ -64,7 +64,8 @@ followed by at least one blank line, and then some content"
   (first (bisect-string (first (header post :filename)) #\.)))
 
 (defmethod title ((post post))
-  (first (header post :title)))
+  (or  (first (header post :title))
+       "Untitled"))
 
 (defmethod post-type ((post post))
   (cond
