@@ -6,11 +6,12 @@
 (load "util.lisp")
 (load "range.lisp")
 (load "plump.lisp")
+(load "routes.lisp")
 
 (in-package pconch)
 
 
-(defun serve (&key port prefix)  
+(defun serve (&key port prefix)
   (let ((acceptor (make-instance 'hunchentoot:easy-acceptor :port port)))
     (push (hunchentoot:create-prefix-dispatcher prefix 'handler)
           hunchentoot:*dispatch-table*)
@@ -33,10 +34,10 @@ starts and stops it"
 
 (defun boot ()
   "stop the app if it's running, then start it up"
-  (handler-case 
-      (app :stop)  (ccl::undefined-function-call () nil)) 
+  (handler-case
+      (app :stop)  (ccl::undefined-function-call () nil))
   (setup :root-prefix *prefix* :port *port*)
   (app :start))
 
 ;; start it up
-(boot) 
+(boot)
