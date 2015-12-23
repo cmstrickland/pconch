@@ -37,9 +37,17 @@ serveable resource"
   (with-open-file (f path :if-does-not-exist nil)
     (if f (not (resource-stale f)) nil)))
 
-(defun serve-resource (path)
+(defun serve-file (path)
   (with-open-file (f path)
     (read f) (read f)))
+
+(defun serve-resource (params)
+  (let* ((category (getf params :category))
+         (topic (getf params :topic))
+         (filepath (target-file-path category topic)))
+    (cond ((valid-resource filepath) (serve-file filepath))
+          ((publish-resource category topic) (serve-file filepath))
+          (t (serve-resource-not-found (hunchentoot:request-uri hunchentoot:*request*))))))
 
 (defun publish-file (file path category topic)
   (let ((meta (pairlis '(:version :original :timestamp) (list 1 path (get-universal-time))))
@@ -97,9 +105,10 @@ serveable resource"
        (lquery:$ (inline  (concatenate 'string  "div#paginator > ul > li#"
                                        (symbol-name ',kind))) (remove))))
 
-(defun serve-index (&optional category)
+(defun serve-index (params)
   "serve an index page"
-  (let ((range (compute-range (hunchentoot:get-parameters* hunchentoot:*request*))))
+  (let ((range (compute-range (hunchentoot:get-parameters* hunchentoot:*request*)))
+        (category (getf params :category)))
     (unless range
       (hunchentoot::redirect  (concatenate 'string (hunchentoot:script-name*)
                                            (format nil "?start=0&end=~a" *index-pager*))
@@ -126,12 +135,15 @@ serveable resource"
             (elt (lquery:$ (serialize)) 0))
           (serve-resource-not-found category)))))
 
+(defun serve-feed (params)
+  (serve-index params))
+
 (defun handler ()
-  (destructuring-bind (&optional category topic)
-      (decode-path (hunchentoot:request-uri hunchentoot:*request*))
-    (if (not (empty-subject topic))
-        (let ((filepath (target-file-path category topic)))
-          (cond ((valid-resource filepath) (serve-resource filepath))
-                ((publish-resource category topic) (serve-resource filepath))
-                (t (serve-resource-not-found (hunchentoot:request-uri hunchentoot:*request*)))))
-        (serve-index category))))
+  (let ((router (map-routes '(("/" serve-index)
+                              ("/?:category?/*.rss" serve-feed)
+                              ("/:category/?" serve-index)
+                              ("/:category/:topic/?" serve-resource)))))
+    (defparameter *R* hunchentoot:*request*)
+    (multiple-value-bind (response value)
+        (myway:dispatch router (decode-path (hunchentoot:request-uri hunchentoot:*request*)))
+      response )))
