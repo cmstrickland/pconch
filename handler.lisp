@@ -8,11 +8,17 @@
 (defun decode-path (req-uri)
   "removes the prefix path components of a uri string. the prefix path
 is defined in *prefix*"
-  (let* ((prefix-path (uri-path *prefix*))
-         (req-path (uri-path req-uri))
-         (path (remove-prefix prefix-path req-path)))
-    (if path
-        (subseq path 0 (min (length path) 2)))))
+  (let* ((uri (puri:parse-uri req-uri))
+         (prefix (make-instance 'puri:uri
+                                :scheme (puri:uri-scheme uri)
+                                :host   (puri:uri-host uri)
+                                :port   (puri:uri-port uri)
+                                :path   *prefix*)))
+    (setf (puri:uri-parsed-path uri)
+          (cons (car (puri:uri-parsed-path uri))
+                (remove-prefix (cdr (puri:uri-parsed-path prefix))
+                               (cdr (puri:uri-parsed-path uri)))))
+    (or (puri:uri-path uri) "/")))
 
 
 (defun lookup-meta (key meta)
