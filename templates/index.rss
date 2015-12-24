@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rdf:RDF
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns="http://my.netscape.com/rdf/simple/0.9/"
+  xmlns="http://purl.org/rss/1.0/"
 >
 
- <channel>
+ <channel rdf:about="URL of this feed">
     <title>Title goes here</title>
     <description>
     A description of the feed goes here.
@@ -13,14 +13,14 @@
  </channel>
 
 
-  <image>
+  <image rdf:about="link url of the image">
     <title>The title of the image</title>
     <url>A link to a small image</url>
     <link>The image links here</link>
   </image>
 
 
-  <item>
+  <item rdf:about="link to the content">
     <title>The title of an entry</title>
     <link>Link to the content</link>
   </item>
