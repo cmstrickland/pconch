@@ -29,9 +29,9 @@ specified by subcat and topic, using unix hard links"
   (merge-pathnames (make-pathname :directory nil :name topic :type "post")
                    *source-dir*))
 
-(defun template-path (template)
+(defun template-path (template &key (type "html"))
   "return the path to the named template file"
-  (merge-pathnames (make-pathname :directory nil :name template :type "html")
+  (merge-pathnames (make-pathname :directory nil :name template :type type)
                    *template-dir*))
 
 (defun stylesheet-path ()
