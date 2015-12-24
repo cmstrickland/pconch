@@ -10,7 +10,18 @@
     A description of the feed goes here.
     </description>
     <link>A url for the channel goes here</link>
+
+    <image rdf:resource="link to a small image" />
+
+
+    <items>
+      <rdf:Seq>
+        <li rdf:resource="link to first items" />
+      </rdf:Seq>
+    </items>
+
  </channel>
+
 
 
   <image rdf:about="link url of the image">
@@ -19,10 +30,10 @@
     <link>The image links here</link>
   </image>
 
-
   <item rdf:about="link to the content">
-    <title>The title of an entry</title>
-    <link>Link to the content</link>
+    <title>Title of the item</title>
+    <link>link to the content</link>
   </item>
+
 
 </rdf:RDF>
