@@ -136,7 +136,19 @@ serveable resource"
           (serve-resource-not-found category)))))
 
 (defun serve-feed (params)
-  (serve-index params))
+  "serve an rss feed"
+  (let ((range '(0 20))
+        (category (getf params :category)))
+
+    (let* ((index (build-index category))
+           (index-length (length index))
+           (range (truncate-range range index-length)))
+      (if index
+          (progn
+            (lquery:$ (initialize (template-path "index" :type "rss"))
+                      "channel > title" (text "beatworm.co.uk"))
+            (lquery:$ "channel > description" (text "beatworm blog"))
+            (elt (lquery:$ (serialize)) 0))))))
 
 (defun handler ()
   (let ((router (map-routes '(("/" serve-index)
