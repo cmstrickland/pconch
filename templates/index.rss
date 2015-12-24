@@ -2,6 +2,7 @@
 <rdf:RDF
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
   xmlns="http://purl.org/rss/1.0/"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
 >
 
  <channel rdf:about="URL of this feed">
@@ -11,12 +12,12 @@
     </description>
     <link>A url for the channel goes here</link>
 
-    <image rdf:resource="link to a small image" />
+    <!-- <image rdf:resource="link to a small image" /> -->
 
 
     <items>
       <rdf:Seq>
-        <li rdf:resource="link to first items" />
+        <li rdf:resource="link to first item" />
       </rdf:Seq>
     </items>
 
@@ -24,15 +25,17 @@
 
 
 
-  <image rdf:about="link url of the image">
-    <title>The title of the image</title>
-    <url>A link to a small image</url>
-    <link>The image links here</link>
-  </image>
+  <!-- <image rdf:about="link url of the image"> -->
+  <!--   <title>The title of the image</title> -->
+  <!--   <url>A link to a small image</url> -->
+  <!--   <link>The image links here</link> -->
+  <!-- </image> -->
 
   <item rdf:about="link to the content">
     <title>Title of the item</title>
     <link>link to the content</link>
+    <description>summary of the content plain text</description>
+    <content:encoded><![CDATA[html content goes here]]></content:encoded>
   </item>
 
 
