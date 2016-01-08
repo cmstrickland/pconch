@@ -47,10 +47,11 @@ followed by at least one blank line, and then some content"
 (defgeneric title (post))
 (defgeneric url   (post))
 (defgeneric resource-name (post))
-(defgeneric summary (post))
+(defgeneric summary (post &key content-type))
 (defgeneric post-type (post))
 
-(defmethod summary ((post post))
+
+(defun summarize-html (post)
   (let ((type (post-type post)))
     (cond
       ((equal type 'link-post )
@@ -59,6 +60,14 @@ followed by at least one blank line, and then some content"
       (t
        (format nil "<li class=\"~a\"d> <h2>~a</h2> ~a </li>"
                (post-type post) (title post) (content post))))))
+
+(defun summarize-rss (post)
+  (format nil "<item rdf:about=\"~a\">~%<title>~a</title>~%<link>~a</link>~%<description>FIXME</description>~%<content:encoded><![CDATA[~a]]></content:encoded>~%</item>"
+          (url post) (title post) (url post) (content post)))
+
+(defmethod summary ((post post) &key (content-type "html"))
+  (cond ((string-equal content-type "html") (summarize-html post))
+        ((string-equal content-type "rss")  (summarize-rss post))))
 
 (defmethod resource-name ((post post))
   (first (bisect-string (first (header post :filename)) #\.)))
