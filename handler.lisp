@@ -148,6 +148,12 @@ serveable resource"
             (lquery:$ (initialize (template-path "index" :type "rss"))
                       "channel > title" (text "beatworm.co.uk"))
             (lquery:$ "channel > description" (text "beatworm blog"))
+            (lquery:$ "item"
+                      (replace-with (reduce
+                                     (lambda (a b) (concatenate 'string a b))
+                                     (mapcar
+                                      (lambda (p) (summary p :content-type "rss"))
+                                      (subseq index (car range) (cadr range))))))
             (elt (lquery:$ (serialize)) 0))))))
 
 (defun handler ()
