@@ -52,15 +52,14 @@ followed by at least one blank line, and then some content"
 (defgeneric post-base-tag (post))
 
 
-(defun summarize-html (post)
-  (let ((type (post-type post)))
-    (cond
-      ((equal type 'link-post )
-       (format nil "<li class=\"~a\"d> ~a </li>"
-               (post-type post) (content post)))
-      (t
-       (format nil "<li class=\"~a\"d> <h2>~a</h2> ~a </li>"
-               (post-type post) (title post) (content post))))))
+(defun summarize-html (post &key (template "post") (selector "article"))
+  (let ((lquery:*lquery-master-document*))
+    (lquery:$ (initialize (template-path template))
+              selector "#content p" (replace-with (content post)))
+    (lquery:$ selector (attr :class (post-type post)))
+    (lquery:$ selector ".permalink" (attr :href (url post)) (text (title post)))
+    (lquery:$ selector  (aref 0) (serialize))))
+
 
 (defun summarize-rss (post)
   (format nil "<item rdf:about=\"~a\">~%<title>~a</title>~%<link>~a</link>~%<description>FIXME</description>~%<content:encoded><![CDATA[~a]]></content:encoded>~%</item>"
