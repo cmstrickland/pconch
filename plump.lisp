@@ -1,4 +1,5 @@
 ;; extend plump to fit quirks
+;; it wouldn't render iframes properly without this
 
 (defclass pconch-iframe (plump:element) ())
 
@@ -20,8 +21,3 @@
                                        :parent plump:*root*
                                        :tag-name "iframe"
                                        :attributes attrs))))
-
-
-
-
-
