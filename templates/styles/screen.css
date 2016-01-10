@@ -9,6 +9,10 @@ h2, h3 { font-size: 110% }
 h1 { padding-left: 1.25em;
      padding-bottom: 0; }
 
+.LINK-POST > h1,
+.LINK-POST > .post-attribution { display: none; }
+
+
 #page-content { background-color:white;
                 max-width: 52em;
                 margin-left:auto;
@@ -19,10 +23,10 @@ h1 { padding-left: 1.25em;
                 padding-bottom: 1em;
                 border: 2px solid black; }
 
-#index-list { margin-left: 1em; 
+#index-list { margin-left: 1em;
               margin-right: 2em; }
 
-#index-list > li { list-style-type: none; 
+#index-list > li { list-style-type: none;
                    margin-left: -1em; }
 
 li.LINK-POST { font-size: 50%; padding-left: 2em; }
