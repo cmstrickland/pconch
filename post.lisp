@@ -49,6 +49,7 @@ followed by at least one blank line, and then some content"
 (defgeneric resource-name (post))
 (defgeneric summary (post &key content-type))
 (defgeneric post-type (post))
+(defgeneric post-base-tag (post))
 
 
 (defun summarize-html (post)
@@ -83,6 +84,10 @@ followed by at least one blank line, and then some content"
            :test #'string-equal ) 'link-post)
     (t 'post)))
 
+(defmethod post-base-tag ((post post))
+  (or (first (header post :tags))
+      "uncategorized"))
+
 (defmethod url ((post post))
   (let ((base-url (puri:parse-uri *base*)))
     (setf (puri:uri-path base-url)
@@ -90,7 +95,7 @@ followed by at least one blank line, and then some content"
                        *prefix*
                        (namestring
                         (make-pathname :directory
-                                       `(:relative  ,(first (header post :tags)))
+                                       `(:relative  ,(post-base-tag post))
                                        :name (resource-name post)))))
     (format nil "~a" base-url)))
 
