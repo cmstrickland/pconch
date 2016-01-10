@@ -124,12 +124,12 @@ serveable resource"
           (progn
             (lquery:$ (initialize (template-path "index"))
                       "h1#page-heading" (text "beatworm.co.uk"))
-            (lquery:$ "ul#index-list > li"
-                      (replace-with (reduce
-                                     (lambda (a b) (concatenate 'string a b))
-                                     (mapcar
-                                      #'summary
-                                      (subseq index (car range) (cadr range))))))
+            (lquery:$
+              "ul#index-list > li"
+              (replace-with
+               (format nil "~{~a~%~}"
+                       (mapcar #'summary
+                               (subseq index (car range) (cadr range))))))
             (if category
                 (lquery:$ "title" (text (format nil "Index of ~a" category))))
             (index-paginator next)
