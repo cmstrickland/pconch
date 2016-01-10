@@ -49,6 +49,7 @@ serveable resource"
           ((publish-resource category topic) (serve-file filepath))
           (t (serve-resource-not-found (hunchentoot:request-uri hunchentoot:*request*))))))
 
+
 (defun publish-file (file path category topic)
   (let ((meta (pairlis '(:version :original :timestamp) (list 1 path (get-universal-time))))
         (post (read-post file)))
@@ -110,8 +111,9 @@ serveable resource"
   (let ((range (compute-range (hunchentoot:get-parameters* hunchentoot:*request*)))
         (category (getf params :category)))
     (unless range
-      (hunchentoot::redirect  (concatenate 'string (hunchentoot:script-name*)
-                                           (format nil "?start=0&end=~a" *index-pager*))
+      (hunchentoot::redirect
+       (concatenate 'string (hunchentoot:script-name*)
+                    (format nil "?start=0&end=~a" *index-pager*))
                                :code 301))
     (let* ((index (build-index category))
            (index-length (length index))
@@ -132,8 +134,10 @@ serveable resource"
                 (lquery:$ "title" (text (format nil "Index of ~a" category))))
             (index-paginator next)
             (index-paginator prev)
-            (elt (lquery:$ (serialize)) 0))
+            (lquery:$ (aref 0) (serialize)))
           (serve-resource-not-found category)))))
+
+
 
 (defun serve-feed (params)
   "serve an rss feed"
@@ -154,7 +158,7 @@ serveable resource"
                                      (mapcar
                                       (lambda (p) (summary p :content-type "rss"))
                                       (subseq index (car range) (cadr range))))))
-            (elt (lquery:$ (serialize)) 0))))))
+            (lquery:$  (serialize)))))))
 
 (defun handler ()
   (let ((router (map-routes '(("/" serve-index)
