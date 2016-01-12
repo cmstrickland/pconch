@@ -55,7 +55,7 @@ followed by at least one blank line, and then some content"
 (defun summarize-html (post &key (template "post") (selector "article"))
   (let ((lquery:*lquery-master-document*))
     (lquery:$ (initialize (template-path template))
-              selector "#content p" (replace-with (content post)))
+              selector "#content section.post-content" (replace-with (content post)))
     (lquery:$ selector (attr :class (post-type post)))
     (lquery:$ selector ".permalink" (attr :href (url post)) (text (title post)))
     (lquery:$ selector  (aref 0) (serialize))))
@@ -93,15 +93,15 @@ followed by at least one blank line, and then some content"
           (concatenate 'string
                        *prefix*
                        (namestring
-                        (make-pathname :directory
-                                       `(:relative  ,(post-base-tag post))
-                                       :name (resource-name post)))))
+                          (make-pathname :directory
+                                         `(:relative  ,(post-base-tag post))
+                                         :name (resource-name post)))))
     (format nil "~a" base-url)))
 
 (defmethod render ((post post) &optional (template "post"))
   (lquery:$ (initialize (template-path template)))
-  (lquery:$ "div#content > p" (replace-with (content post)))
-  (lquery:$ "h1#post-heading" (text (first (header post :title))))
+  (lquery:$ "div#content > section.post-content" (replace-with (content post)))
+  (lquery:$ "article > h1#post-heading > a.permalink" (replace-with (first (header post :title))))
   (elt (lquery:$ (serialize)) 0))
 
 (defmethod header ((post post) header)
