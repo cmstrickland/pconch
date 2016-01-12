@@ -127,7 +127,7 @@ serveable resource"
             (lquery:$
               "ul#index-list > li"
               (replace-with
-               (format nil "~{~a~%~}"
+               (format nil "~{<li class=\"index-entry\">~a</li>~%~}"
                        (mapcar #'summary
                                (subseq index (car range) (cadr range))))))
             (if category
@@ -136,8 +136,6 @@ serveable resource"
             (index-paginator prev)
             (lquery:$ (aref 0) (serialize)))
           (serve-resource-not-found category)))))
-
-
 
 (defun serve-feed (params)
   "serve an rss feed"

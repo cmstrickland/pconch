@@ -10,7 +10,7 @@ h1 { padding-left: 1.25em;
      padding-bottom: 0; }
 
 .LINK-POST > h1,
-.LINK-POST > .post-attribution { display: none; }
+.LINK-POST  .post-attribution { display: none; }
 
 
 #page-content { background-color:white;
