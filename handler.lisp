@@ -125,7 +125,7 @@ serveable resource"
             (lquery:$ (initialize (template-path "index"))
                       "h1#page-heading" (text "beatworm.co.uk"))
             (lquery:$
-              "ul#index-list > li"
+              "ol#index-list > li"
               (replace-with
                (format nil "~{<li class=\"index-entry\">~a</li>~%~}"
                        (mapcar #'summary
