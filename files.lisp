@@ -36,3 +36,6 @@ specified by subcat and topic, using unix hard links"
 
 (defun stylesheet-path ()
   (merge-pathnames (make-pathname :directory '(:relative "styles")) *template-dir*))
+
+(defun file-regexp-match-p (f rx)
+  (not (null (ppcre:scan rx (namestring f)))))

@@ -81,7 +81,7 @@ serveable resource"
    (mapcar (lambda (f)
              (with-open-file (p f)
                (read-post p)))
-           (remove-if (lambda (f) (string-ends-with (namestring f) #\~))
+           (remove-if-not (lambda (f) (file-regexp-match-p f ".*post$"))
                       (uiop:directory-files *source-dir*)))
    #'string>
    :key (lambda (f) (car (header f :date)))))
