@@ -108,11 +108,11 @@ serveable resource"
 
 (defun serve-index (params)
   "serve an index page"
-  (let ((range (compute-range (hunchentoot:get-parameters* hunchentoot:*request*)))
+  (let ((range (compute-range (hunchentoot:get-parameters* *last-request*)))
         (category (getf params :category)))
     (unless range
       (hunchentoot::redirect
-       (concatenate 'string (hunchentoot:script-name*)
+       (concatenate 'string *script-name*
                     (format nil "?start=0&end=~a" *index-pager*))
                                :code 301))
     (let* ((index (build-index category))
@@ -162,8 +162,9 @@ serveable resource"
   (let ((router (map-routes '(("/" serve-index)
                               ("/?:category?/*.rss" serve-feed)
                               ("/:category/?" serve-index)
-                              ("/:category/:topic/?" serve-resource)))))
-    (defparameter *R* hunchentoot:*request*)
+                              ("/:category/:topic/?" serve-resource))))
+        (*last-request* hunchentoot:*request*)
+        (*script-name* (hunchentoot::script-name*)))
     (multiple-value-bind (response value)
         (myway:dispatch router (decode-path (hunchentoot:request-uri hunchentoot:*request*)))
       response )))

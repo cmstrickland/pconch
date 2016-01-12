@@ -8,3 +8,5 @@
 (defparameter *template-dir* #p "./templates/")
 (defparameter *www-dir* #p"~/Sites/blog/")
 (defparameter *index-pager* 20)
+(defvar *last-request* nil)
+(defvar *script-name* nil)
