@@ -39,3 +39,4 @@ specified by subcat and topic, using unix hard links"
 
 (defun file-regexp-match-p (f rx)
   (not (null (ppcre:scan rx (namestring f)))))
+

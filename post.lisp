@@ -35,8 +35,6 @@ followed by at least one blank line, and then some content"
                                        (concatenate 'string (content post) line))))
      finally (return post)))
 
-
-
 (defclass post ()
   ((headers :accessor headers :initform nil)
    (content :accessor content :initform nil)))
@@ -50,6 +48,8 @@ followed by at least one blank line, and then some content"
 (defgeneric summary (post &key content-type))
 (defgeneric post-type (post))
 (defgeneric post-base-tag (post))
+(defgeneric post-author (post))
+(defgeneric post-date (post))
 
 
 (defun summarize-html (post &key (template "post") (selector "article"))
@@ -64,6 +64,18 @@ followed by at least one blank line, and then some content"
 (defun summarize-rss (post)
   (format nil "<item rdf:about=\"~a\">~%<title>~a</title>~%<link>~a</link>~%<description>FIXME</description>~%<content:encoded><![CDATA[~a]]></content:encoded>~%</item>"
           (url post) (title post) (url post) (content post)))
+
+(defun post-header-getdefault (post hdr dflt)
+  (or (header post hdr)
+      (list dflt)))
+
+(defmethod post-author (post)
+  (post-header-getdefault post :author "cms"))
+
+(defmethod post-date (post)
+  (post-header-getdefault
+   post :date
+   (formatted-date (file-write-date (source-file-path (resource-name post) )))))
 
 (defmethod summary ((post post) &key (content-type "html"))
   (cond ((string-equal content-type "html") (summarize-html post))
@@ -100,8 +112,12 @@ followed by at least one blank line, and then some content"
 
 (defmethod render ((post post) &optional (template "post"))
   (lquery:$ (initialize (template-path template)))
-  (lquery:$ "div#content > section.post-content" (replace-with (content post)))
+  (lquery:$ "section.post-content" (replace-with (content post)))
   (lquery:$ "article > h1#post-heading > a.permalink" (replace-with (first (header post :title))))
+  (lquery:$ "ul.post-attribution"
+            (replace-with
+             (format nil "<li>author: ~a</li>~%<li>date: ~a</li>"
+                     (car(post-author post)) (car (post-date post)))))
   (elt (lquery:$ (serialize)) 0))
 
 (defmethod header ((post post) header)
