@@ -114,7 +114,7 @@ followed by at least one blank line, and then some content"
 (defmethod render ((post post) &optional (template "post"))
   (lquery:$ (initialize (template-path template)))
   (lquery:$ "section.post-content" (replace-with (content post)))
-  (lquery:$ "article > h1#post-heading > a.permalink" (replace-with (first (header post :title))))
+  (lquery:$ "article > h1#post-heading > a.permalink" (replace-with (title post)))
   (lquery:$ "ul.post-attribution"
             (replace-with
              (format nil "<li>author: ~a</li>~%<li>date: ~a</li>"
