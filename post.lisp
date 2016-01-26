@@ -126,4 +126,5 @@ followed by at least one blank line, and then some content"
 (defmethod on-topic ((post post) category)
   (remove-if-not (lambda (f) (equal category f))
    (append (header post :tags)
-           (header post :category))))
+           (header post :category)
+           '("uncategorized"))))
