@@ -50,6 +50,7 @@ followed by at least one blank line, and then some content"
 (defgeneric post-base-tag (post))
 (defgeneric post-author (post))
 (defgeneric post-date (post))
+(defgeneric post-categorize (post))
 
 
 (defun summarize-html (post &key (template "post") (selector "article"))
@@ -126,5 +127,7 @@ followed by at least one blank line, and then some content"
 (defmethod on-topic ((post post) category)
   (remove-if-not (lambda (f) (equal category f))
    (append (header post :tags)
-           (header post :category)
-           '("uncategorized"))))
+           (post-categorize post))))
+
+(defmethod post-categorize ((post post))
+  (post-header-getdefault post :category "uncategorized"))
