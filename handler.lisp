@@ -38,10 +38,15 @@ serveable resource"
     (if f (not (resource-stale f)) nil)))
 
 (defun serve-file (path)
+  "Just serve a file over http. First sexp is metadata, second is
+content"
   (with-open-file (f path)
     (read f) (read f)))
 
 (defun serve-resource (params)
+  "Decode a request for a resource.  if it exists as a serveable file,
+serve it. if it exists as a source file but not a serveable file,
+publish it and then serve it. Otherwise, 404"
   (let* ((category (getf params :category))
          (topic (getf params :topic))
          (filepath (target-file-path category topic)))
@@ -51,6 +56,8 @@ serveable resource"
 
 
 (defun publish-file (file path category topic)
+  "compile a source file and publish it. This includes linking it into
+place as a serveable resource for every secondary category / tag"
   (let ((meta (pairlis '(:version :original :timestamp) (list 1 path (get-universal-time))))
         (post (read-post file)))
     (if (on-topic post category)
@@ -66,11 +73,13 @@ serveable resource"
                                      (header post :category)))) t))))
 
 (defun publish-resource (category topic)
+  "turn a request cat / topic tuple into a call to publish file"
   (let ((path (source-file-path topic)))
     (with-open-file (f path :if-does-not-exist nil)
       (if f (publish-file f path category topic) nil))))
 
 (defun serve-resource-not-found (url)
+  "Content and response for 404"
   (setf (hunchentoot:return-code*) hunchentoot:+http-not-found+)
   (format nil "No content found for ~a" url))
 
