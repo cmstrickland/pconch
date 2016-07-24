@@ -3,22 +3,32 @@
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" type="text/css" media="screen" 
-          href="/static/styles/screen.css"/>
+          href="/static/styles/app.css"/>
     <title>Index</title>
   </head>
   <body>
-    <div id="page-content">
-      <div id="header">
-        <h1 id="page-heading"> Page heading </h1>
-      </div>
-      <ol id="index-list">
-        <li> A list of entries </li>
-      </ol>
-      <div id="paginator">
-        <ul>
-          <li class="paginator-link" id="prev"><a>Prev</a></li>
-          <li class="paginator-link" id="next"><a>Next</a></li>
-        </ul>
+    <div class="row">
+      <div class="small-12 columns">
+        <div id="page-content">
+          <div id="header" class="text-center">
+            <h1 id="page-heading"> Page heading </h1>
+          </div>
+          <div class="row">
+            <div class="small-10 small-offset-2 columns">
+          <ol id="index-list" class="no-bullet">
+            <li> A list of entries </li>
+          </ol>
+            </div>
+          </div>
+          <div id="paginator" class="row">
+            <div class="small-10 small-offset-2 columns">
+            <ul class="menu">
+              <li class="paginator-link" id="prev"><a>Prev</a></li>
+              <li class="paginator-link" id="next"><a>Next</a></li>
+            </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </body>

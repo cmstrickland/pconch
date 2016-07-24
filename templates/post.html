@@ -2,27 +2,33 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" media="screen" 
+          href="/static/styles/app.css"/>
     <title>Post title</title>
   </head>
   <body class="post">
-    <article>
-      <h1 id="post-heading"> <a href="#" class="permalink">Post title heading</a></h1>
-      <div id="content">
-        <section class="post-content">
-          <p> A post content would go here </p>
-        </section>
-        <section class="post-attribution">
-          <ul class="post-attribution">
-            <li class="attribute"> Attribute </li>
-          </ul>
-        </section>
-    </article>
-    <footer>
-      <div class="navigation">
-        <ul>
-          <li> A navigation element </li>
-        </ul>
+    <div class="row">
+      <div class="small-10 small-offset-2 columns">
+        <article>
+          <h1 id="post-heading"> <a href="#" class="permalink">Post title heading</a></h1>
+          <div id="content" >
+            <section class="post-content">
+              <p> A post content would go here </p>
+            </section>
+            <section class="post-attribution">
+              <ul class="post-attribution menu">
+                <li class="attribute"> Attribute </li>
+              </ul>
+            </section>
+        </article>
+        <footer>
+          <div class="navigation">
+            <ul class="menu">
+              <li> A navigation element </li>
+            </ul>
+          </div>
+        </footer>
+        </div>
       </div>
-    </footer>
   </body>
 </html>
