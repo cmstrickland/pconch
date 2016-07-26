@@ -165,7 +165,7 @@ place as a serveable resource for every secondary category / tag"
                                      (mapcar
                                       (lambda (p) (summary p :content-type "rss"))
                                       (subseq index (car range) (cadr range))))))
-            (lquery:$  (serialize)))))))
+            (lquery:$  (aref 0) (serialize)))))))
 
 (defun handler ()
   (let ((router (map-routes '(("/" serve-index)
