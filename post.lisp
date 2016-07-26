@@ -122,7 +122,7 @@ followed by at least one blank line, and then some content"
   (elt (lquery:$ (serialize)) 0))
 
 (defmethod header ((post post) header)
-  (cdr (assoc header (headers post))))g
+  (cdr (assoc header (headers post))))
 
 (defmethod on-topic ((post post) category)
   (remove-if-not (lambda (f) (equal category f))
