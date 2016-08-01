@@ -113,7 +113,7 @@ place as a serveable resource for every secondary category / tag"
                                     (format nil "?start=~a&end=~a"
                                             (car ,kind) (cadr ,kind)))))
        (lquery:$ (inline  (concatenate 'string  "div#paginator > ul > li#"
-                                       (symbol-name ',kind))) (remove))))
+                                       (symbol-name ',kind))) )))
 
 (defun serve-index (params)
   "serve an index page"
