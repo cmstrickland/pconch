@@ -59,6 +59,7 @@ followed by at least one blank line, and then some content"
               selector "#content section.post-content" (replace-with (content post)))
     (lquery:$ selector (attr :class (post-type post)))
     (lquery:$ selector ".permalink" (attr :href (url post)) (text (title post)))
+    (lquery:$ selector ".post-attribution .attribute" (text "BATTRIBUTE"))
     (lquery:$ selector  (aref 0) (serialize))))
 
 
