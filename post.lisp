@@ -59,7 +59,7 @@ followed by at least one blank line, and then some content"
               selector "#content section.post-content" (replace-with (content post)))
     (lquery:$ selector (attr :class (post-type post)))
     (lquery:$ selector ".permalink" (attr :href (url post)) (text (title post)))
-    (lquery:$ selector ".post-attribution .attribute" (text (format nil "~a"  (first (post-date post)))))
+    (lquery:$ selector ".post-attribution .attribute" (text (post-date post)))
     (lquery:$ selector  (aref 0) (serialize))))
 
 
@@ -75,9 +75,11 @@ followed by at least one blank line, and then some content"
   (post-header-getdefault post :author "cms"))
 
 (defmethod post-date (post)
-  (post-header-getdefault
-   post :date
-   (formatted-date (file-write-date (source-file-path (resource-name post) )))))
+  (first (split-sequence:SPLIT-SEQUENCE
+          #\Space 
+          (car (post-header-getdefault
+                post :date
+                (car (formatted-date (file-write-date (source-file-path (resource-name post) )))))))))
 
 (defmethod summary ((post post) &key (content-type "html"))
   (cond ((string-equal content-type "html") (summarize-html post))
@@ -116,10 +118,11 @@ followed by at least one blank line, and then some content"
   (lquery:$ (initialize (template-path template)))
   (lquery:$ "section.post-content" (replace-with (content post)))
   (lquery:$ "article > h1#post-heading > a.permalink" (replace-with (title post)))
+  (lquery:$ "span.dateline" (text (post-date post)))
   (lquery:$ "ul.post-attribution"
             (replace-with
              (format nil "<li>author: ~a</li>~%<li>date: ~a</li>"
-                     (car(post-author post)) (car (post-date post)))))
+                     (car(post-author post)) (post-date post))))
   (elt (lquery:$ (serialize)) 0))
 
 (defmethod header ((post post) header)
