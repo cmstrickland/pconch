@@ -97,7 +97,7 @@ followed by at least one blank line, and then some content"
   (cond
     ((find "links" (append (header post :tags)
                            (header post :category))
-           :test #'string-equal ) 'link-post)
+           :test #'string-equal ) :link-post)
     (t 'post)))
 
 (defmethod post-base-tag ((post post))
