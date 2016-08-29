@@ -122,7 +122,7 @@ followed by at least one blank line, and then some content"
   (lquery:$ "span.dateline" (text (post-date post)))
   (lquery:$ "ul.post-attribution"
             (replace-with
-             (format nil "<li>author: ~a</li>~%<li>date: ~a</li>"
+             (format nil "<span>posted by ~a</span>~%<span>on ~a</span>"
                      (car(post-author post)) (post-date post))))
   (elt (lquery:$ (serialize)) 0))
 
