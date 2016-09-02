@@ -51,6 +51,7 @@ followed by at least one blank line, and then some content"
 (defgeneric post-author (post))
 (defgeneric post-date (post))
 (defgeneric post-categorize (post))
+(defgeneric post-tagify (post))
 
 
 (defun summarize-html (post &key (template "post") (selector "article"))
@@ -136,3 +137,10 @@ followed by at least one blank line, and then some content"
 
 (defmethod post-categorize ((post post))
   (post-header-getdefault post :category "uncategorized"))
+
+
+(defmethod post-tagify ((post post))
+  "return a list of all tags attached to the post header concatenated onto 
+the result of post-categorize"
+  (append (post-categorize post)
+         (header post :tags)))
