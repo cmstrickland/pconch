@@ -157,7 +157,7 @@ place as a serveable resource for every secondary category / tag"
       (if index
           (progn
             (lquery:$ (initialize (template-path "index" :type "rss"))
-                      "channel > title" (text "beatworm.co.uk"))
+                      "channel > title" (text "beatworm.co.uk"));
             (lquery:$ "channel > description" (text "beatworm blog"))
             (lquery:$ "item"
                       (replace-with (reduce
@@ -166,6 +166,15 @@ place as a serveable resource for every secondary category / tag"
                                       (lambda (p) (summary p :content-type "rss"))
                                       (subseq index (car range) (cadr range))))))
             (lquery:$  (aref 0) (serialize)))))))
+
+(defun category-url (category)
+  (format nil "~a~a~a/" *base* *prefix* category))
+
+(defun category-link (category)
+  ;; FIXME - construct a proper URI 
+  "return html for a hyperlink to a category index"
+  (format nil "<a href=\"~a\">~a</a>" (category-url category)
+          category))
 
 (defun handler ()
   (let ((router (map-routes '(("/" serve-index)
@@ -177,3 +186,5 @@ place as a serveable resource for every secondary category / tag"
     (multiple-value-bind (response value)
         (myway:dispatch router (decode-path (hunchentoot:request-uri hunchentoot:*request*)))
       response )))
+
+
