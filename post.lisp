@@ -125,6 +125,12 @@ followed by at least one blank line, and then some content"
             (replace-with
              (format nil "<span>posted by ~a</span>~%<span>on ~a</span>"
                      (car(post-author post)) (post-date post))))
+  (lquery:$ ".navigation .menu li"
+            (replace-with 
+             (format nil "~{~a~}"
+                     (mapcar (lambda (c)
+                               (format nil "<li class=\"category-menu\">~a</li>" (category-link c)))
+                             (post-tagify post)))))
   (elt (lquery:$ (serialize)) 0))
 
 (defmethod header ((post post) header)
