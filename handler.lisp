@@ -61,8 +61,9 @@ place as a serveable resource for every secondary category / tag"
   (let ((meta (pairlis '(:version :original :timestamp) (list 1 path (get-universal-time))))
         (post (read-post file)))
     (if (on-topic post category)
-        (progn
-          (with-open-file (of (target-file-path category topic)
+        (let ((target (target-file-path category topic)))
+          (ensure-directories-exist target)
+          (with-open-file (of target
                               :direction :output
                               :if-exists :supersede)
             (prin1 meta of)
