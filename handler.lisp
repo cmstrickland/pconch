@@ -107,7 +107,7 @@ place as a serveable resource for every secondary category / tag"
   `(if ,kind
        (lquery:$ (inline  (concatenate 'string "div#paginator > ul > li#"
                                        (symbol-name ',kind) "> a"))
-                 (attr "href"
+                 (attr "hidden" nil "href"
                        (concatenate 'string
                                     (hunchentoot:script-name*)
                                     (format nil "?start=~a&end=~a"
