@@ -168,7 +168,10 @@ place as a serveable resource for every secondary category / tag"
             (lquery:$  (aref 0) (serialize)))))))
 
 (defun category-url (category)
-  (format nil "~a~a~a/" *base* *prefix* category))
+  (let ((u (puri:parse-uri *base*)))
+    (setf (puri:uri-path u)
+          (concatenate 'string *prefix* category))
+    u))
 
 (defun category-link (category)
   ;; FIXME - construct a proper URI 
