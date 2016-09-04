@@ -122,9 +122,11 @@ place as a serveable resource for every secondary category / tag"
         (category (getf params :category)))
     (unless range
       (hunchentoot::redirect
-       (concatenate 'string *script-name*
-                    (format nil "?start=0&end=~a" *index-pager*))
-                               :code 301))
+       (let ((u (puri:parse-uri *base*)))
+         (setf (puri:uri-path u)
+               (concatenate 'string *prefix*
+                            (format nil "?start=0&end=~a" *index-pager*)))
+         (format nil "~a" u)) :code 301))
     (let* ((index (build-index category))
            (index-length (length index))
            (range (truncate-range range index-length))
