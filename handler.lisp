@@ -184,6 +184,7 @@ place as a serveable resource for every secondary category / tag"
 
 (defun handler ()
   (let ((router (map-routes '(("/" serve-index)
+			      ("/feed/" serve-feed)
                               ("/?:category?/*.rss" serve-feed)
                               ("/:category/?" serve-index)
                               ("/:category/:topic/?" serve-resource))))
