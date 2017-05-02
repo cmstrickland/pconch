@@ -1,5 +1,5 @@
 (in-package :pconch)
-(defparameter *base* "http://localhost:2125/")
+(defparameter *base* "https://beatworm.co.uk/")
 (defparameter *prefix* "/blog/")
 (defparameter *port* 2125)
 (defparameter *source-dir* "~/Documents/blog/")

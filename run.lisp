@@ -36,7 +36,7 @@ starts and stops it"
 (defun boot ()
   "stop the app if it's running, then start it up"
   (handler-case
-      (app :stop)  (ccl::undefined-function-call () nil))
+      (app :stop)  (condition () nil))
   (setup :root-prefix *prefix* :port *port*)
   (app :start))
 
