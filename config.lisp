@@ -10,3 +10,4 @@
 (defparameter *index-pager* 20)
 (defvar *last-request* nil)
 (defvar *script-name* nil)
+(load "local.lisp" :if-does-not-exist nil)
