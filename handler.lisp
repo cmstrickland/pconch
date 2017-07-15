@@ -34,13 +34,13 @@ is defined in *prefix*"
 (defun valid-resource (path)
   "returns truthily if the requested resource path represents a
 serveable resource"
-  (with-open-file (f path :if-does-not-exist nil)
+  (with-open-file (f path :if-does-not-exist nil :external-format :utf-8)
     (if f (not (resource-stale f)) nil)))
 
 (defun serve-file (path)
   "Just serve a file over http. First sexp is metadata, second is
 content"
-  (with-open-file (f path)
+  (with-open-file (f path :external-format :utf-8)
     (read f) (read f)))
 
 (defun serve-resource (params)
@@ -64,6 +64,7 @@ place as a serveable resource for every secondary category / tag"
         (let ((target (target-file-path category topic)))
           (ensure-directories-exist target)
           (with-open-file (of target
+			      :external-format :utf-8
                               :direction :output
                               :if-exists :supersede)
             (prin1 meta of)
@@ -76,7 +77,7 @@ place as a serveable resource for every secondary category / tag"
 (defun publish-resource (category topic)
   "turn a request cat / topic tuple into a call to publish file"
   (let ((path (source-file-path topic)))
-    (with-open-file (f path :if-does-not-exist nil)
+    (with-open-file (f path :if-does-not-exist nil :external-format :utf-8)
       (if f (publish-file f path category topic) nil))))
 
 (defun serve-resource-not-found (url)
