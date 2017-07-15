@@ -89,7 +89,7 @@ place as a serveable resource for every secondary category / tag"
   "build a sorted list of post objects for every post in the source directory"
   (sort
    (mapcar (lambda (f)
-             (with-open-file (p f)
+             (with-open-file (p f :external-format :utf-8)
                (read-post p)))
            (remove-if-not (lambda (f) (file-regexp-match-p f ".*post$"))
                       (uiop:directory-files *source-dir*)))

@@ -10,4 +10,5 @@
 (defparameter *index-pager* 20)
 (defvar *last-request* nil)
 (defvar *script-name* nil)
+;; local overrides can go in here, for site configuration
 (load "local.lisp" :if-does-not-exist nil)
