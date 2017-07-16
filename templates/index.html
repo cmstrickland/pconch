@@ -8,29 +8,32 @@
     <script src="/mint/?js" type="text/javascript"></script>
   </head>
   <body>
-    <div class="row">
-      <div class="small-12 columns">
-        <div id="page-content">
-          <div id="header" class="text-center">
-            <h1 id="page-heading"> Page heading </h1>
-          </div>
-          <div class="row">
-            <div class="small-8 small-offset-2 columns">
-          <ol id="index-list" class="no-bullet">
-            <li> A list of entries </li>
-          </ol>
-            </div>
-          </div>
-          <div  class="row">
-            <div id="paginator" class="small-10 small-offset-2 columns">
-            <ul class="menu">
-              <li class="paginator-link" id="prev" ><a hidden>Newer</a></li>
-              <li class="paginator-link" id="next" ><a hidden>Older</a></li>
-            </ul>
-            </div>
-          </div>
+    <div id="page-container" class="row column">
+      
+        
+        <div id="header" class="row">
+            <h1 id="page-heading" class="small-12 columns text-center"> Page heading </h1>
         </div>
-      </div>
+
+	
+        <div id="index" class="row">
+
+	    <ol id="index-list" class="no-bullet small-12 medium-10 medium-push-1 large-8 large-push-2 columns">
+		<li> A list of entries </li>
+	    </ol>
+
+        </div>
+        <div  class="row">
+            <div id="paginator" class="small-10  columns">
+		<ul class="menu">
+		    <li class="paginator-link" id="next" ><a hidden>Older</a></li>
+		    <li class="paginator-link" id="prev" ><a hidden>Newer</a></li>
+		    <li id="home" ><a href="./">Home</a></li>
+		    <li id="about"><a href="/">About</a></li>
+		</ul>
+            </div>
+        </div>
+      
     </div>
   </body>
 </html>

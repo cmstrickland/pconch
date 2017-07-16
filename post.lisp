@@ -61,7 +61,11 @@ followed by at least one blank line, and then some content"
     (lquery:$ selector (attr :class (post-type post)))
     (lquery:$ selector ".permalink" (attr :href (url post)) (text (title post)))
     (lquery:$ selector ".dateline" (text (post-date post)))
-    (lquery:$ selector ".post-attribution .attribute" (text (post-date post)))
+    (lquery:$ "ul.post-attribution"
+            (replace-with
+             (format nil "<span>posted by ~a</span>~%<span>on ~a</span>"
+                     (car(post-author post)) (post-date post))))
+    ;(lquery:$ selector ".post-attribution .attribute" (text (post-date post)))
     (lquery:$ selector  (aref 0) (serialize))))
 
 
@@ -118,9 +122,9 @@ followed by at least one blank line, and then some content"
 
 (defmethod render ((post post) &optional (template "post"))
   (lquery:$ (initialize (template-path template)))
-  (lquery:$ "title" (text (title  post)))
+  (lquery:$ "title" (text (title post)))
   (lquery:$ "section.post-content" (replace-with (content post)))
-  (lquery:$ "article > h1#post-heading > a.permalink" (replace-with (title post)))
+  (lquery:$ "a.permalink" (replace-with  (format nil "<h1 class=\"column\">~a</h1>" (title post))))
   (lquery:$ "span.dateline" (text (post-date post)))
   (lquery:$ "ul.post-attribution"
             (replace-with

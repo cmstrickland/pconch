@@ -107,7 +107,7 @@ place as a serveable resource for every secondary category / tag"
 
 (defmacro index-paginator (kind)
   `(if ,kind
-       (lquery:$ (inline  (concatenate 'string "div#paginator > ul > li#"
+       (lquery:$ (inline  (concatenate 'string "div#paginator > ul.menu > li#"
                                        (symbol-name ',kind) "> a"))
                  (attr "hidden" nil "href"
                        (concatenate 'string
