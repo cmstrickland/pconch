@@ -95,7 +95,7 @@ place as a serveable resource for every secondary category / tag"
            (remove-if-not (lambda (f) (file-regexp-match-p f ".*post$"))
                       (uiop:directory-files *source-dir*)))
    #'string>
-   :key (lambda (f) (car (header f :date)))))
+   :key (lambda (f) (post-date f))))
 
 (defun build-index (&optional category)
   "build an sorted index of posts, perhaps filtered by a category / tag "
