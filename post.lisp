@@ -19,20 +19,24 @@ header followed by strings of all the header values "
 expect a series of headers being a line with a heading and a :
 followed by at least one blank line, and then some content"
   (loop for line = (read-line open-file nil :EOF)
-     with in-header
+     with headers-finished = nil
      with post = (make-instance 'post)
      initially (push (cons :filename (list (file-namestring open-file)))
                      (headers post))
      until (eq line :EOF) do
-       (cond ((blank-line line)  (if in-header
-                                     (setf in-header nil)
-                                     (setf in-header t)))
+       ;; (format t "~a ~a ~a -> ~a ~%"
+       ;; 	       (list-length (headers post))
+       ;; 	       headers-finished
+       ;; 	       (blank-line line)
+       ;; 	       line)
+       (cond ((blank-line line)      (if (> (list-length (headers post)) 1)
+					 (setf headers-finished t)))
 
-             (in-header          (setf (headers post)
-                                       (push  (parse-header line) (headers post))))
+             ((not headers-finished) (setf (headers post)
+					   (push  (parse-header line) (headers post))))
 
-             (t                  (setf (content post)
-                                       (concatenate 'string (content post) line))))
+             (t                      (setf (content post)
+					   (concatenate 'string (content post) line))))
      finally (return post)))
 
 (defclass post ()
