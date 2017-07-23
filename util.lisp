@@ -61,3 +61,8 @@ is a keyword and the cdr is whitespace trimmed"
 
 (defun string-ends-with (str ch)
   (and str (eq ch (elt str (- (length str) 1)))))
+
+(defun append-line (thing line)
+	     (setf thing (concatenate 'string thing
+				      (string #\newline)
+				      line)))
