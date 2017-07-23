@@ -29,15 +29,20 @@ followed by at least one blank line, and then some content"
        ;; 	       headers-finished
        ;; 	       (blank-line line)
        ;; 	       line)
-       (cond ((blank-line line)      (if (> (list-length (headers post)) 1)
-					 (setf headers-finished t)))
+       (cond ((blank-line line)      (progn
+				       (if (> (list-length (headers post)) 1)
+					   (setf headers-finished t))
+				       (if headers-finished
+					   (setf (content post)
+						 (append-line (content post) "")))))
 
              ((not headers-finished) (setf (headers post)
 					   (push  (parse-header line) (headers post))))
 
              (t                      (setf (content post)
-					   (concatenate 'string (content post) line))))
+					   (append-line (content post) line))))
      finally (return post)))
+
 
 (defclass post ()
   ((headers :accessor headers :initform nil)
@@ -56,12 +61,13 @@ followed by at least one blank line, and then some content"
 (defgeneric post-date (post))
 (defgeneric post-categorize (post))
 (defgeneric post-tagify (post))
+(defgeneric html-content (post))
 
 
 (defun summarize-html (post &key (template "post") (selector "article"))
   (let ((lquery:*lquery-master-document*))
     (lquery:$ (initialize (template-path template))
-              selector "#content section.post-content" (replace-with (content post)))
+              selector "#content section.post-content" (replace-with (html-content post)))
     (lquery:$ selector (attr :class (post-type post)))
     (lquery:$ selector ".permalink" (attr :href (url post)) (text (title post)))
     (lquery:$ selector ".dateline" (text (post-date post)))
@@ -75,7 +81,7 @@ followed by at least one blank line, and then some content"
 
 (defun summarize-rss (post)
   (format nil "<item rdf:about=\"~a\">~%<title>~a</title>~%<link>~a</link>~%<description>FIXME</description>~%<content:encoded><![CDATA[~a]]></content:encoded>~%</item>"
-          (url post) (title post) (url post) (content post)))
+          (url post) (title post) (url post) (html-content post)))
 
 (defun post-header-getdefault (post hdr dflt)
   (or (header post hdr)
@@ -91,7 +97,13 @@ followed by at least one blank line, and then some content"
                 post :date
                 (car (formatted-date (file-write-date (source-file-path (resource-name post) )))))))))
 
-(defmethod summary ((post post) &key (content-type "html"))
+(defmethod html-content ((post post))
+  (if (eq (string-upcase (car (header post :format))) "HTML")
+      (content post)
+      (multiple-value-bind (_ markup) (cl-markdown:markdown (content post) :stream nil)
+	markup)))
+
+(DEFMETHOD summary ((post post) &key (content-type "html"))
   (cond ((string-equal content-type "html") (summarize-html post))
         ((string-equal content-type "rss")  (summarize-rss post))))
 
@@ -127,7 +139,7 @@ followed by at least one blank line, and then some content"
 (defmethod render ((post post) &optional (template "post"))
   (lquery:$ (initialize (template-path template)))
   (lquery:$ "title" (text (title post)))
-  (lquery:$ "section.post-content" (replace-with (content post)))
+  (lquery:$ "section.post-content" (replace-with (html-content post)))
   (lquery:$ "a.permalink" (replace-with  (format nil "<h1 class=\"column\">~a</h1>" (title post))))
   (lquery:$ "span.dateline" (text (post-date post)))
   (lquery:$ "ul.post-attribution"
