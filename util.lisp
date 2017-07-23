@@ -29,7 +29,7 @@ is a keyword and the cdr is whitespace trimmed"
 
 (defun blank-line (line)
   "true if the string provided represents a blank line"
-  (or (eq 0 (count-if #'alpha-char-p line))
+  (or (eq 0 (count-if (lambda (c) (or (digit-char-p c) (alpha-char-p c))) line))
       (eq 0 (search ";;" line :end2 2))))
 
 
