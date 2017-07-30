@@ -75,7 +75,7 @@ is a keyword and the cdr is whitespace trimmed"
     (remove-if-not #'uiop:directory-pathname-p (uiop:directory* pattern))))
 
 (defun cache-version ()
-    (if (eq *cache-version* (dir-mtime *source-dir*))
+    (if (eql *cache-version* (dir-mtime *source-dir*))
 	*cache-version*
 	(progn (clache:clear-cache *index-cache*)
 	       (setf *cache-version* (dir-mtime *source-dir*)))))
