@@ -8,7 +8,7 @@
 (load "plump.lisp")
 (load "routes.lisp")
 (load "dates.lisp")
-
+(in-package pconch)
 ;; these are dependent on config values so set them here
 ;; which is safely post-configuration
 
@@ -16,7 +16,7 @@
 (defparameter *index-cache* (make-instance 'clache:file-store :directory *cache-dir*))
 (defparameter *cache-version* (dir-mtime *source-dir*))
 
-(in-package pconch)
+
 
 
 (defun serve (&key port prefix)
