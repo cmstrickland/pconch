@@ -7,6 +7,8 @@
 (defparameter *source-dir* #p"~/Documents/blog/")
 (defparameter *template-dir* #p "./templates/")
 (defparameter *www-dir* #p"~/Sites/blog/")
+(defparameter *cache-dir* (cl-fad:merge-pathnames-as-directory *www-dir* #p".cache/"))
+(defparameter *index-cache* (make-instance 'clache:file-store :directory *cache-dir*))
 (defparameter *index-pager* 20)
 (defvar *last-request* nil)
 (defvar *script-name* nil)

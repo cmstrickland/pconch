@@ -66,3 +66,19 @@ is a keyword and the cdr is whitespace trimmed"
 	     (setf thing (concatenate 'string thing
 				      (string #\newline)
 				      line)))
+(defun dir-mtime (pathstring)
+  (osicat-posix:stat-mtime (osicat-posix:stat (car (uiop:directory* pathstring)))))
+
+(defun subdirs (pathstring)
+  ;; needs to make sure merge pathname treats pathstring as a directory
+  (let ((pattern (uiop:merge-pathnames* pathstring"*")))
+    (remove-if-not #'uiop:directory-pathname-p (uiop:directory* pattern))))
+
+(defun cache-version ()
+    (if (eq *cache-version* (dir-mtime *source-dir*))
+	*cache-version*
+	(progn (clache:clear-cache *index-cache*)
+	       (setf *cache-version* (dir-mtime *source-dir*)))))
+
+(defun cache-key (version resource params)
+  (format nil "~a-~a-~a" version resource params))

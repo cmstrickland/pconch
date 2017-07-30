@@ -128,27 +128,28 @@ place as a serveable resource for every secondary category / tag"
                (concatenate 'string (puri:uri-path u)
                             (format nil "?start=0&end=~a" *index-pager*)))
          (format nil "~a" u)) :code 302))
-    (let* ((index (build-index category))
-           (index-length (length index))
-           (range (truncate-range range index-length))
-           (prev  (compute-prev range))
-           (next  (compute-next range index-length)))
-      (if index
-          (progn
-            (lquery:$ (initialize (template-path "index"))
-                      "h1#page-heading" (text "beatworm.co.uk"))
-            (lquery:$
-              "ol#index-list > li"
-              (replace-with
-               (format nil "~{<li class=\"index-entry\">~a</li>~%~}"
-                       (mapcar #'summary
-                               (subseq index (car range) (cadr range))))))
-            (if category
-                (lquery:$ "title" (text (format nil "Index of ~a" category))))
-            (index-paginator next)
-            (index-paginator prev)
-            (lquery:$ (aref 0) (serialize)))
-          (serve-resource-not-found category)))))
+    (clache:with-cache ((cache-key (cache-version) "index" (hunchentoot:request-uri*)) :store *index-cache*)
+      (let* ((index (build-index category))
+	     (index-length (length index))
+	     (range (truncate-range range index-length))
+	     (prev  (compute-prev range))
+	     (next  (compute-next range index-length)))
+	(if index
+	    (progn
+	      (lquery:$ (initialize (template-path "index"))
+			"h1#page-heading" (text "beatworm.co.uk"))
+	      (lquery:$
+		"ol#index-list > li"
+		(replace-with
+		 (format nil "~{<li class=\"index-entry\">~a</li>~%~}"
+			 (mapcar #'summary
+				 (subseq index (car range) (cadr range))))))
+	      (if category
+		  (lquery:$ "title" (text (format nil "Index of ~a" category))))
+	      (index-paginator next)
+	      (index-paginator prev)
+	      (lquery:$ (aref 0) (serialize)))
+	    (serve-resource-not-found category))))))
 
 (defun serve-feed (params)
   "serve an rss feed"

@@ -35,6 +35,7 @@ starts and stops it"
 
 (defun boot ()
   "stop the app if it's running, then start it up"
+  (defparameter *cache-version* (dir-mtime *source-dir*))
   (handler-case
       (app :stop)  (condition () nil))
   (setup :root-prefix *prefix* :port *port*)
