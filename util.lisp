@@ -72,10 +72,6 @@ is a keyword and the cdr is whitespace trimmed"
                      (uiop:directory-files (uiop:merge-pathnames* pathstring "*")))
              #'>)))
 
-(defun subdirs (pathstring)
-  ;; needs to make sure merge pathname treats pathstring as a directory
-  (let ((pattern (uiop:merge-pathnames* pathstring"*")))
-    (remove-if-not #'uiop:directory-pathname-p (uiop:directory* pattern))))
 
 (defun cache-version ()
     (if (eql *cache-version* (dir-mtime *source-dir*))
