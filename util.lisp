@@ -67,7 +67,10 @@ is a keyword and the cdr is whitespace trimmed"
 				      (string #\newline)
 				      line)))
 (defun dir-mtime (pathstring)
-  (osicat-posix:stat-mtime (osicat-posix:stat (car (uiop:directory* pathstring)))))
+  (car (sort (mapcar (lambda (f )
+                       (osicat-posix:stat-mtime (osicat-posix:stat f)))
+                     (directory (uiop:merge-pathnames* pathstring "*")))
+             #'>)))
 
 (defun subdirs (pathstring)
   ;; needs to make sure merge pathname treats pathstring as a directory
