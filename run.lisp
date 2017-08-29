@@ -8,6 +8,7 @@
 (load "plump.lisp")
 (load "routes.lisp")
 (load "dates.lisp")
+;; this load overloads some cl-markdown behaviours
 (load "markdown.lisp")
 (in-package pconch)
 ;; these are dependent on config values so set them here
