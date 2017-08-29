@@ -69,7 +69,7 @@ is a keyword and the cdr is whitespace trimmed"
 (defun dir-mtime (pathstring)
   (car (sort (mapcar (lambda (f )
                        (osicat-posix:stat-mtime (osicat-posix:stat f)))
-                     (directory (uiop:merge-pathnames* pathstring "*")))
+                     (uiop:directory-files (uiop:merge-pathnames* pathstring "*")))
              #'>)))
 
 (defun subdirs (pathstring)
