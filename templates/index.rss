@@ -1,42 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rdf:RDF
-  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns="http://purl.org/rss/1.0/"
-  xmlns:content="http://purl.org/rss/1.0/modules/content/"
->
+<rss version="2.0">
 
- <channel rdf:about="URL of this feed">
+ <channel>
     <title>Title goes here</title>
-    <description>
-    A description of the feed goes here.
-    </description>
+    <description>beatworm.co.uk a blog by cms</description>
     <link>A url for the channel goes here</link>
 
-    <!-- <image rdf:resource="link to a small image" /> -->
-
-
-    <items>
-      <rdf:Seq>
-        <li rdf:resource="link to first item" />
-      </rdf:Seq>
-    </items>
-
- </channel>
-
-
-
-  <!-- <image rdf:about="link url of the image"> -->
-  <!--   <title>The title of the image</title> -->
-  <!--   <url>A link to a small image</url> -->
-  <!--   <link>The image links here</link> -->
-  <!-- </image> -->
-
-  <item rdf:about="link to the content">
+  <item>
     <title>Title of the item</title>
     <link>link to the content</link>
     <description>summary of the content plain text</description>
-    <content:encoded><![CDATA[html content goes here]]></content:encoded>
+    <pubDate>publication date</pubDate>
+    <guuid>permalink</guuid>
   </item>
 
-
-</rdf:RDF>
+ </channel>
+</rss>

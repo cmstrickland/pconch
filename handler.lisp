@@ -154,8 +154,8 @@ place as a serveable resource for every secondary category / tag"
 (defun serve-feed (params)
   "serve an rss feed"
   (let ((range '(0 20))
-        (category (getf params :category)))
-
+        (category (getf params :category))
+        (plump:*tag-dispatchers* plump:*xml-tags*))
     (let* ((index (build-index category))
            (index-length (length index))
            (range (truncate-range range index-length)))
@@ -164,6 +164,7 @@ place as a serveable resource for every secondary category / tag"
             (lquery:$ (initialize (template-path "index" :type "rss"))
                       "channel > title" (text "beatworm.co.uk"));
             (lquery:$ "channel > description" (text "beatworm blog"))
+            (lquery:$ "channel > link" (text "https://beatworm.co.uk/blog/"))
             (lquery:$ "item"
                       (replace-with (reduce
                                      (lambda (a b) (concatenate 'string a b))

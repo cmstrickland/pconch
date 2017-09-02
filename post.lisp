@@ -80,8 +80,8 @@ followed by at least one blank line, and then some content"
 
 
 (defun summarize-rss (post)
-  (format nil "<item rdf:about=\"~a\">~%<title>~a</title>~%<link>~a</link>~%<description>FIXME</description>~%<content:encoded><![CDATA[~a]]></content:encoded>~%</item>"
-          (url post) (title post) (url post) (html-content post)))
+  (format nil "<item>~%<title>~a</title>~%<link>~a</link>~%<description><![CDATA[~a]]> </description>~%<pubDate>~a</pubDate>~%<guid>~a</guid>~%</item>"
+          (title post) (url post) (html-content post) (post-date post) (url post)))
 
 (defun post-header-getdefault (post hdr dflt)
   (or (header post hdr)
