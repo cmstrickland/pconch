@@ -58,7 +58,7 @@ followed by at least one blank line, and then some content"
 (defgeneric post-type (post))
 (defgeneric post-base-tag (post))
 (defgeneric post-author (post))
-(defgeneric post-date (post))
+(defgeneric post-date (post &key format))
 (defgeneric post-categorize (post))
 (defgeneric post-tagify (post))
 (defgeneric html-content (post))
@@ -81,7 +81,7 @@ followed by at least one blank line, and then some content"
 
 (defun summarize-rss (post)
   (format nil "<item>~%<title>~a</title>~%<link>~a</link>~%<description><![CDATA[~a]]> </description>~%<pubDate>~a</pubDate>~%<guid>~a</guid>~%</item>"
-          (title post) (url post) (html-content post) (post-date post) (url post)))
+          (title post) (url post) (html-content post) (post-date post :format :rfc822) (url post)))
 
 (defun post-header-getdefault (post hdr dflt)
   (or (header post hdr)
@@ -90,12 +90,14 @@ followed by at least one blank line, and then some content"
 (defmethod post-author (post)
   (post-header-getdefault post :author "cms"))
 
-(defmethod post-date (post)
-  (first (split-sequence:SPLIT-SEQUENCE
-          #\Space 
-          (car (post-header-getdefault
-                post :date
-                (car (formatted-date (file-write-date (source-file-path (resource-name post) )))))))))
+(defmethod post-date ((post post) &key (format :display))
+  (let ((date (first (split-sequence:SPLIT-SEQUENCE
+                      #\Space 
+                      (car (post-header-getdefault
+                            post :date
+                            (car (formatted-date (file-write-date (source-file-path (resource-name post) ))))))))))
+    (cond ((eq format :display) date)
+          ((eq format :rfc822) (rfc-formatted-datetime (local-time:parse-timestring date))))))
 
 (defmethod html-content ((post post))
   (if (eq (string-upcase (car (header post :format))) "HTML")
