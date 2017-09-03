@@ -80,8 +80,9 @@ followed by at least one blank line, and then some content"
 
 
 (defun summarize-rss (post)
-  (format nil "<item>~%<title>~a</title>~%<link>~a</link>~%<description><![CDATA[~a]]> </description>~%<pubDate>~a</pubDate>~%<guid>~a</guid>~%</item>"
-          (title post) (url post) (html-content post) (post-date post :format :rfc822) (url post)))
+  (let ((item-title (if (eq (post-type post) :short-post) "" (title post))))
+    (format nil "<item>~%<title>~a</title>~%<link>~a</link>~%<description><![CDATA[~a]]> </description>~%<pubDate>~a</pubDate>~%<guid>~a</guid>~%</item>"
+            item-title (url post) (html-content post) (post-date post :format :rfc822) (url post))))
 
 (defun post-header-getdefault (post hdr dflt)
   (or (header post hdr)
@@ -120,7 +121,10 @@ followed by at least one blank line, and then some content"
   (cond
     ((find "links" (append (header post :tags)
                            (header post :category))
-           :test #'string-equal ) :link-post)
+           :test #'string-equal ) :short-post)
+    ((find "notes" (append (header post :tags)
+                           (header post :category))
+           :test #'string-equal) :short-post)
     (t 'post)))
 
 (defmethod post-base-tag ((post post))
