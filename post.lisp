@@ -98,7 +98,8 @@ followed by at least one blank line, and then some content"
                             post :date
                             (car (formatted-date (file-write-date (source-file-path (resource-name post) ))))))))))
     (cond ((eq format :display) date)
-          ((eq format :rfc822) (rfc-formatted-datetime (local-time:parse-timestring date))))))
+          ((eq format :rfc822) (rfc-formatted-datetime (local-time:parse-timestring date)))
+          ((eq format :iso8601) (iso-formatted-datetime (local-time:parse-timestring date))))))
 
 (defmethod html-content ((post post))
   (if (eq (string-upcase (car (header post :format))) "HTML")

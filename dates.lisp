@@ -7,3 +7,7 @@
 (defun rfc-formatted-datetime (n)
   "given a universal time return RFC 822 formatted date time string"
   (local-time:format-timestring nil n :format local-time:+rfc-1123-format+))
+
+(defun iso-formatted-datetime (n)
+  "given a universal time return ISO 8601 formatted date time string"
+  (local-time:format-timestring nil n :format local-time:+iso-8601-format+))
