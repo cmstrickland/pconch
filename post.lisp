@@ -92,11 +92,10 @@ followed by at least one blank line, and then some content"
   (post-header-getdefault post :author "cms"))
 
 (defmethod post-date ((post post) &key (format :display))
-  (let ((date (first (split-sequence:SPLIT-SEQUENCE
-                      #\Space 
-                      (car (post-header-getdefault
-                            post :date
-                            (car (formatted-date (file-write-date (source-file-path (resource-name post) ))))))))))
+  (let ((date  
+          (car (post-header-getdefault
+                post :date
+                (car (formatted-date (file-write-date (source-file-path (resource-name post) ))))))))
     (cond ((eq format :display) date)
           ((eq format :rfc822) (rfc-formatted-datetime (local-time:parse-timestring date))))))
 
