@@ -14,4 +14,6 @@
 
 (defun parse-pconch-datetime (n)
   "look for YYYY-MM-dd HH:MI dates which is what we use in pconch"
-  (local-time:parse-timestring n :date-time-separator #\Space))
+  ;; append a zero seconds component so parse-timestring is happy
+  (let ((ts (concatenate 'string n ":00")))
+    (local-time:parse-timestring ts :date-time-separator #\Space)))
