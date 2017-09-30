@@ -129,7 +129,7 @@ followed by at least one blank line, and then some content"
 
 (defmethod post-base-tag ((post post))
   (or (first (header post :tags))
-      "uncategorized"))
+      (first (post-categorize post))))
 
 (defmethod url ((post post))
   (let ((base-url (puri:parse-uri *base*)))
