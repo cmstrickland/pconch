@@ -70,7 +70,7 @@ followed by at least one blank line, and then some content"
               selector "#content section.post-content" (replace-with (html-content post)))
     (lquery:$ selector (attr :class (post-type post)))
     (lquery:$ selector ".permalink" (attr :href (url post)) (text (title post)))
-    (lquery:$ selector ".dateline" (text (post-date post)))
+    (lquery:$ selector ".dateline" (text (post-date post :format :short)))
     (lquery:$ "ul.post-attribution"
             (replace-with
              (format nil "<span>posted by ~a</span>~%<span>on ~a</span>"
@@ -97,6 +97,7 @@ followed by at least one blank line, and then some content"
                post :date
                (car (formatted-date (file-write-date (source-file-path (resource-name post) ))))))))
     (cond ((eq format :display) date)
+          ((eq format :short) (subseq date 0 10))
           ((eq format :rfc822) (rfc-formatted-datetime (parse-pconch-datetime date)))
           ((eq format :iso8601) (iso-formatted-datetime (parse-pconch-datetime date))))))
 
@@ -147,7 +148,7 @@ followed by at least one blank line, and then some content"
   (lquery:$ "title" (text (title post)))
   (lquery:$ "section.post-content" (replace-with (html-content post)))
   (lquery:$ "a.permalink" (replace-with  (format nil "<h1 class=\"column\">~a</h1>" (title post))))
-  (lquery:$ "span.dateline" (text (post-date post)))
+  (lquery:$ "span.dateline" (text (post-date post :format :short)))
   (lquery:$ "ul.post-attribution"
             (replace-with
              (format nil "<span>posted by ~a</span>~%<span>on ~a</span>"
