@@ -141,7 +141,7 @@ place as a serveable resource for every secondary category / tag"
 	      (lquery:$
 		"ol#index-list > li"
 		(replace-with
-		 (format nil "~{<li class=\"index-entry\">~a</li>~%~}"
+		 (format nil "~{<li class=\"index-entry h-entry\">~a</li>~%~}"
 			 (mapcar #'summary
 				 (subseq index (car range) (cadr range))))))
 	      (if category
