@@ -73,8 +73,8 @@ followed by at least one blank line, and then some content"
     (lquery:$ selector ".dateline" (text (post-date post :format :short)))
     (lquery:$ "ul.post-attribution"
             (replace-with
-             (format nil "<span>posted by ~a</span>~%<span>on ~a</span>"
-                     (car(post-author post)) (post-date post))))
+             (format nil "<span>posted by <a class=\"p-author h-card\" href=\"\">~a</a></span>~%<span> on <time class=\"dt-published\" datetime=\"~a\">~a</time></span>"
+                     (car(post-author post)) (post-date post) (post-date post))))
     ;(lquery:$ selector ".post-attribution .attribute" (text (post-date post)))
     (lquery:$ selector  (aref 0) (serialize))))
 
@@ -151,8 +151,8 @@ followed by at least one blank line, and then some content"
   (lquery:$ "span.dateline" (text (post-date post :format :short)))
   (lquery:$ "ul.post-attribution"
             (replace-with
-             (format nil "<span>posted by ~a</span>~%<span>on ~a</span>"
-                     (car(post-author post)) (post-date post))))
+             (format nil "<span>posted by <a class=\"p-author h-card\" href=\"\">~a</a></span>~%<span> on <time class=\"dt-published\" datetime=\"~a\">~a</time></span></span>"
+                     (car(post-author post)) (post-date post) (post-date post))))
   (lquery:$ ".navigation .menu li"
             (replace-with 
              (format nil "~{~a~}"
