@@ -182,7 +182,7 @@ place as a serveable resource for every secondary category / tag"
 (defun category-link (category)
   ;; FIXME - construct a proper URI 
   "return html for a hyperlink to a category index"
-  (format nil "<a href=\"~a\">~a</a>" (category-url category)
+  (format nil "<a href=\"~a\" class=\"p-category\">~a</a>" (category-url category)
           category))
 
 (defun handler ()
