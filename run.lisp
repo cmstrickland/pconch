@@ -50,4 +50,10 @@ starts and stops it"
   (app :start))
 
 ;; start it up
-(boot)
+(defun main ()
+  (boot)
+  (sb-thread:join-thread
+   (find-if
+    (lambda (th)
+      (string= (sb-thread:thread-name th) "hunchentoot-listener-1"))
+    (sb-thread:list-all-threads))))
