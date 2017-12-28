@@ -55,5 +55,5 @@ starts and stops it"
   (sb-thread:join-thread
    (find-if
     (lambda (th)
-      (string= (sb-thread:thread-name th) "hunchentoot-listener-1"))
+      (search  "hunchentoot-listener" (sb-thread:thread-name th)))
     (sb-thread:list-all-threads))))
