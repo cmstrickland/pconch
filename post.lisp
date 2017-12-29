@@ -153,7 +153,7 @@ followed by at least one blank line, and then some content"
   (lquery:$ "ul.post-attribution"
             (replace-with
              (format nil "<span>posted by <a class=\"p-author h-card\" rel=\"me\" href=\"/\">~a</a></span>~%
-                          <span> on <time class=\"dt-published\" datetime=\"~a\">~a</time></span></span>"
+                          <span> on <time class=\"dt-published\" datetime=\"~a\">~a</time></span>"
                      (car(post-author post)) (post-date post :format :iso8601) (post-date post))))
   (lquery:$ ".navigation .menu li"
             (replace-with 
