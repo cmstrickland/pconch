@@ -1,5 +1,4 @@
 (in-package :pconch)
-(annot:enable-annot-syntax)
 (defun parse-header (line)
   "take a line that looks like a header return a list with a keyword
 header followed by strings of all the header values "
@@ -92,16 +91,17 @@ followed by at least one blank line, and then some content"
 (defmethod post-author (post)
   (post-header-getdefault post :author "cms"))
 
-@clache:cache ((:post-date post format))
+
 (defmethod post-date ((post post) &key (format :display))
-  (let ((date  
-         (car (post-header-getdefault
-               post :date
-               (car (formatted-date (file-write-date (source-file-path (resource-name post) ))))))))
-    (cond ((eq format :display) date)
-          ((eq format :short) (subseq date 0 10))
-          ((eq format :rfc822) (rfc-formatted-datetime (parse-pconch-datetime date)))
-          ((eq format :iso8601) (iso-formatted-datetime (parse-pconch-datetime date))))))
+  (clache:with-inline-cache ('(post format) :expire 120)
+      (let ((date  
+             (car (post-header-getdefault
+                   post :date
+                   (car (formatted-date (file-write-date (source-file-path (resource-name post) ))))))))
+        (cond ((eq format :display) date)
+              ((eq format :short) (subseq date 0 10))
+              ((eq format :rfc822) (rfc-formatted-datetime (parse-pconch-datetime date)))
+              ((eq format :iso8601) (iso-formatted-datetime (parse-pconch-datetime date)))))))
 
 (defmethod html-content ((post post))
   (if (eq (string-upcase (car (header post :format))) "HTML")
@@ -129,7 +129,6 @@ followed by at least one blank line, and then some content"
                            (header post :category))
            :test #'string-equal) :short-post)
     (t 'post)))
-
 (defmethod post-base-tag ((post post))
   (or (first (header post :tags))
       (first (post-categorize post))))
