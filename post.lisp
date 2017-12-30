@@ -93,7 +93,7 @@ followed by at least one blank line, and then some content"
 
 
 (defmethod post-date ((post post) &key (format :display))
-  (clache:with-inline-cache ((format nil "~A~A" (url post) format) :expire 120)
+  (clache:with-inline-cache ((format nil "~A~A" (resource-name post) format) :expire 120)
       (let ((date  
              (car (post-header-getdefault
                    post :date
