@@ -1,5 +1,5 @@
 (in-package :pconch)
-
+(annot:enable-annot-syntax)
 (defun parse-header (line)
   "take a line that looks like a header return a list with a keyword
 header followed by strings of all the header values "
@@ -92,6 +92,7 @@ followed by at least one blank line, and then some content"
 (defmethod post-author (post)
   (post-header-getdefault post :author "cms"))
 
+@cache ((:post-date post format))
 (defmethod post-date ((post post) &key (format :display))
   (let ((date  
          (car (post-header-getdefault
