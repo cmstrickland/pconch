@@ -92,7 +92,7 @@ followed by at least one blank line, and then some content"
 (defmethod post-author (post)
   (post-header-getdefault post :author "cms"))
 
-@cache ((:post-date post format))
+@clache:cache ((:post-date post format))
 (defmethod post-date ((post post) &key (format :display))
   (let ((date  
          (car (post-header-getdefault
