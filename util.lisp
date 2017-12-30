@@ -27,10 +27,17 @@ is a keyword and the cdr is whitespace trimmed"
         (mapcar  (lambda (s) (string-trim '(#\Space) s))
                  (cdr lst))))
 
+(defun whitespace-char-p (c)
+  (find c'(#\Space #\Tab #\Linefeed #\Return #\Page)))
+
 (defun blank-line (line)
   "true if the string provided represents a blank line"
-  (or (eq 0 (count-if (lambda (c) (or (digit-char-p c) (alpha-char-p c))) line))
-      (eq 0 (search ";;" line :end2 2))))
+  (cond
+    ((eql 0 (length line)) t)
+    ((eql 1 (length line)) (if (whitespace-char-p (elt line 0)) t nil))
+    ((equal ";;" (subseq line 0 2)) t)
+    (t  (not(some (lambda (c) (not (whitespace-char-p c))) line)))))
+
 
 
 (defun csv-list (str)
