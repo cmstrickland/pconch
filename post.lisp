@@ -93,6 +93,8 @@ followed by at least one blank line, and then some content"
 
 
 (defmethod post-date ((post post) &key (format :display))
+  ;; uses the date to sort the post list so memoize these results for a short time
+  ;; so that the sort across all posts can benefit from cached date strings
   (clache:with-inline-cache ((format nil "~A~A" (resource-name post) format) :expire 120)
       (let ((date  
              (car (post-header-getdefault
