@@ -10,10 +10,10 @@
 (load "dates.lisp")
 ;; this load overloads some cl-markdown behaviours
 (load "markdown.lisp")
+
 (in-package pconch)
 ;; these are dependent on config values so set them here
 ;; which is safely post-configuration
-
 (defparameter *cache-dir* (cl-fad:merge-pathnames-as-directory *www-dir* #p".cache/"))
 (defparameter *index-cache* (make-instance 'clache:file-store :directory *cache-dir*))
 (defparameter *cache-version* (dir-mtime *source-dir*))
@@ -49,7 +49,8 @@ starts and stops it"
   (setup :root-prefix *prefix* :port *port*)
   (app :start))
 
-;; start it up
+;; this function is used as the entry point for the compiled sbcl
+#+sbcl
 (defun main ()
   (boot)
   (sb-thread:join-thread
