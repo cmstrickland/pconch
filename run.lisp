@@ -58,3 +58,12 @@ starts and stops it"
     (lambda (th)
       (search  "hunchentoot-listener" (sb-thread:thread-name th)))
     (sb-thread:list-all-threads))))
+
+
+(defun main ()
+  (boot)
+  (bordeaux-threads:join-thread
+   (find-if
+    (lambda (th)
+      (search "hunchentoot-listener" (bordeaux-threads:thread-name th)))
+    (bordeaux-threads:all-threads))))
