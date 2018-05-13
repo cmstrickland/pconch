@@ -1,22 +1,10 @@
-(load "packages.lisp")
-(load "config.lisp")
-(load "handler.lisp")
-(load "files.lisp")
-(load "post.lisp")
-(load "util.lisp")
-(load "range.lisp")
-(load "plump.lisp")
-(load "routes.lisp")
-(load "dates.lisp")
-;; this load overloads some cl-markdown behaviours
-(load "markdown.lisp")
-
 (in-package pconch)
 ;; these are dependent on config values so set them here
 ;; which is safely post-configuration
 (defparameter *cache-dir* (cl-fad:merge-pathnames-as-directory *www-dir* #p".cache/"))
 (defparameter *index-cache* (make-instance 'clache:file-store :directory *cache-dir*))
 (defparameter *cache-version* (dir-mtime *source-dir*))
+
 
 
 (defun serve (&key port prefix)
