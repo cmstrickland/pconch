@@ -19,8 +19,6 @@
 (defparameter *cache-version* (dir-mtime *source-dir*))
 
 
-
-
 (defun serve (&key port prefix)
   (let ((acceptor (make-instance 'hunchentoot:easy-acceptor :port port)))
     (push (hunchentoot:create-prefix-dispatcher prefix 'handler)
