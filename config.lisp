@@ -5,7 +5,7 @@
 (defparameter *source-dir* "~/Documents/blog/")
 (defparameter *www-dir* "~/Sites/blog/")
 (defparameter *source-dir* #p"~/Documents/blog/")
-(defparameter *template-dir* #p "./templates/")
+(defparameter *template-dir* (merge-pathnames #p"./templates/" (asdf/system:system-source-directory 'pconch)))
 (defparameter *www-dir* #p"~/Sites/blog/")
 (defparameter *index-pager* 20)
 (defvar *last-request* nil)
