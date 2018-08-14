@@ -1,5 +1,3 @@
-(ql:quickload :prove)
-(ql:quickload :cl-store)
 (in-package :cl-user)
 (defpackage pconch-test
   (:use :cl :prove :pconch))

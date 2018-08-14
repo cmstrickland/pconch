@@ -18,4 +18,14 @@
                (:file "routes")
                (:file "dates")
                (:file "markdown")
-               (:file "run")))
+               (:file "run"))
+   :in-order-to ((test-op (test-op "pconch/test"))))
+
+(defsystem "pconch/test"
+  :description "test suite for pconch"
+  :depends-on  ("pconch" "prove" )
+  :defsystem-depends-on ("prove-asdf")
+  :pathname "tests/"
+  :components ((:test-file "test-post"))
+  :perform (test-op  (op c)
+                    (funcall (intern #.(string :run) :prove) c)))
