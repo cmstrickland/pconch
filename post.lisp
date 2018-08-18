@@ -61,6 +61,7 @@ followed by at least one blank line, and then some content"
 (defgeneric post-categorize (post))
 (defgeneric post-tagify (post))
 (defgeneric html-content (post))
+(defgeneric post-equal (post other))
 
 
 (defun summarize-html (post &key (template "post") (selector "article"))
@@ -99,7 +100,7 @@ followed by at least one blank line, and then some content"
       (let ((date  
              (car (post-header-getdefault
                    post :date
-                   (car (formatted-date (file-write-date (source-file-path (resource-name post) ))))))))
+                   (car (formatted-date (file-write-date (source-file-path (resource-name post)))))))))
         (handler-case
             (cond ((eq format :display) date)
                   ((eq format :short) (subseq date 0 10))
@@ -183,4 +184,8 @@ followed by at least one blank line, and then some content"
   "return a list of all tags attached to the post header concatenated onto 
 the result of post-categorize"
   (append (post-categorize post)
-         (header post :tags)))
+          (header post :tags)))
+
+(defmethod post-equal ((post post) (other post))
+  (equal (slot-value post 'content)
+         (slot-value other 'content)))
