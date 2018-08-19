@@ -3,9 +3,10 @@
   :version "0.0.1"
   :author "cms"
   :serial t
-  :depends-on ("osicat" "cl-who" "hunchentoot" "puri" "lquery" "array-utils"
+  :depends-on ("osicat" "cl-who" "hunchentoot" "puri" "quri" "lquery" "array-utils"
                 "clss" "plump" "trivial-indent" "uiop" "myway"
-                "cl-ppcre" "cl-markdown" "clache" "local-time" "bordeaux-threads")
+                "cl-ppcre" "cl-markdown" "clache" "local-time" "bordeaux-threads"
+                )
   :components (
                (:file "packages")
                (:file "config")

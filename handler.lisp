@@ -110,15 +110,22 @@ place as a serveable resource for every secondary category / tag"
        (lquery:$ (inline  (concatenate 'string "div#paginator > ul.menu > li#"
                                        (symbol-name ',kind) "> a"))
                  (attr "hidden" nil "href"
-                       (concatenate 'string
-                                    (hunchentoot:script-name*)
-                                    (format nil "?start=~a&end=~a"
-                                            (car ,kind) (cadr ,kind)))))
+                       (add-params-to-uri (hunchentoot:request-uri*)
+                                          (pairlis '("start" "end")
+                                                   (list (car ,kind) (cadr ,kind))) )))
        (lquery:$ (inline  (concatenate 'string  "div#paginator > ul > li#"
                                        (symbol-name ',kind))) )))
 
+
 (defun add-params-to-uri (u p)
-  (puri:merge-uris (concatenate 'string (puri:uri-query u) "&" p) u))
+  (let* ((surl (quri:uri u))
+        (params (quri:uri-query-params surl)))
+    (dolist (x p)
+      (if (assoc (car x) params :test #'equal)
+          (setf (cdr (assoc (car x) params :test #'equal)) (cdr x) )
+          (push x params)))
+    (setf (quri:uri-query-params surl) params)
+    (quri:render-uri surl)))
 
 (defun serve-index (params)
   "serve an index page"
@@ -126,7 +133,7 @@ place as a serveable resource for every secondary category / tag"
         (category (getf params :category)))
     (unless range
       (hunchentoot::redirect
-       (add-params-to-uri (hunchentoot:request-uri*) (format nil "start=0&end=~a" *index-pager*))
+       (add-params-to-uri (hunchentoot:request-uri*) `(("start" . 0) ("end" . ,*index-pager*)))
         :code 302))
     (clache:with-cache ((cache-key (cache-version) "index" (hunchentoot:request-uri*)) :store *index-cache*)
       (let* ((index (build-index category))
