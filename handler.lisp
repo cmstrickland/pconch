@@ -117,17 +117,17 @@ place as a serveable resource for every secondary category / tag"
        (lquery:$ (inline  (concatenate 'string  "div#paginator > ul > li#"
                                        (symbol-name ',kind))) )))
 
+(defun add-params-to-uri (u p)
+  (puri:merge-uris (concatenate 'string (puri:uri-query u) "&" p) u))
+
 (defun serve-index (params)
   "serve an index page"
   (let ((range (compute-range (hunchentoot:get-parameters* *last-request*)))
         (category (getf params :category)))
     (unless range
       (hunchentoot::redirect
-       (let ((u (puri:parse-uri (hunchentoot:request-uri*))))
-         (setf (puri:uri-path u)
-               (concatenate 'string (puri:uri-path u)
-                            (format nil "?start=0&end=~a" *index-pager*)))
-         (format nil "~a" u)) :code 302))
+       (add-params-to-uri (hunchentoot:request-uri*) (format nil "start=0&end=~a" *index-pager*))
+        :code 302))
     (clache:with-cache ((cache-key (cache-version) "index" (hunchentoot:request-uri*)) :store *index-cache*)
       (let* ((index (build-index category))
 	     (index-length (length index))
