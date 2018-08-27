@@ -1,6 +1,5 @@
 (in-package :pconch)
 
-
 (defun uri-path (uri)
   "returns the path components of a uri string"
   (cdr (puri:uri-parsed-path (puri:parse-uri uri))))
@@ -158,6 +157,19 @@ place as a serveable resource for every secondary category / tag"
 	      (lquery:$ (aref 0) (serialize)))
 	    (serve-resource-not-found category))))))
 
+(defun with-auth (domain handler params)
+  (multiple-value-bind (auth-user auth-password)
+      (hunchentoot:authorization)
+    (unless (and auth-user auth-password
+                 (equal auth-user "cms")
+                 (equal auth-password "s3kr3ts"))
+      (hunchentoot:require-authorization domain)))
+  (funcall handler params))
+
+(defun serve-drafts (params)
+    
+  "<h1>Current Drafts</h1>")
+
 (defun serve-feed (params)
   "serve an rss feed"
   (let ((range '(0 20))
@@ -195,6 +207,7 @@ place as a serveable resource for every secondary category / tag"
 (defun handler ()
   (let ((router (map-routes '(("/" serve-index)
 			      ("/feed/" serve-feed)
+                              ("@/pconch/drafts/" serve-drafts)
                               ("/?:category?/*.rss" serve-feed)
                               ("/:category/?" serve-index)
                               ("/:category/:topic/?" serve-resource))))

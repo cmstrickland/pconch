@@ -1,11 +1,17 @@
 (in-package :pconch)
 
-;; (myway:connect *route-mapper* "/"  #'build-index)
-;; (myway:connect *route-mapper* "/?:category?/*.rss" #'build-feed)
-;; (myway:connect *route-mapper* "/:category/" #'build-index)
-;; (myway:connect *route-mapper* "/:category/:topic/?" #'build-entry)
+;; routes that begin with an "@" symbol require authentication
+(defun authy-route (r)
+  (equal (subseq r 0 1) "@"))
 
 (defun map-routes (routes)
   (let ((mapper (myway:make-mapper)))
     (dolist (r routes mapper)
-      (myway:connect mapper (first r) (symbol-function (cadr r))))))
+      (let* ((path (first r))
+            (func (cadr r))
+            (handler (if (authy-route path)
+                         (progn
+                           (setf path (subseq path 1))
+                           (lambda (p) (with-auth "pconch" func p)))
+                         (symbol-function func))))
+        (myway:connect mapper path handler)))))
