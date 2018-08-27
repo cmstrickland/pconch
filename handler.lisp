@@ -193,16 +193,18 @@ place as a serveable resource for every secondary category / tag"
                                       (subseq index (car range) (cadr range))))))
             (lquery:$  (aref 0) (serialize)))))))
 
+
+
 (defun category-url (category)
-  (let ((u (puri:parse-uri *base*)))
-    (setf (puri:uri-path u)
+  (let ((u (quri:uri *base*)))
+    (setf (quri:uri-path u)
           (concatenate 'string *prefix* category))
     u))
-
+  
 (defun category-link (category)
   ;; FIXME - construct a proper URI 
   "return html for a hyperlink to a category index"
-  (format nil "<a href=\"~a\" class=\"p-category\">~a</a>" (category-url category)
+  (format nil "<a href=\"~a\" class=\"p-category\">~a</a>" (quri:render-uri (category-url category))
           category))
 
 (defun handler ()

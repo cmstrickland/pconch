@@ -139,15 +139,15 @@ followed by at least one blank line, and then some content"
       (first (post-categorize post))))
 
 (defmethod url ((post post))
-  (let ((base-url (puri:parse-uri *base*)))
-    (setf (puri:uri-path base-url)
+  (let ((base-url (quri:uri *base*)))
+    (setf (quri:uri-path base-url)
           (concatenate 'string
                        *prefix*
                        (namestring
                           (make-pathname :directory
                                          `(:relative  ,(post-base-tag post))
                                          :name (resource-name post)))))
-    (format nil "~a" base-url)))
+    (quri:render-uri base-url)))
 
 (defmethod render ((post post) &optional (template "post"))
   (lquery:$ (initialize (template-path template)))
