@@ -1,23 +1,24 @@
 (in-package :pconch)
 
-(defun uri-path (uri)
-  "returns the path components of a uri string"
-  (cdr (puri:uri-parsed-path (puri:parse-uri uri))))
 
 (defun decode-path (req-uri)
-  "removes the prefix path components of a uri string. the prefix path
-is defined in *prefix*"
-  (let* ((uri (puri:parse-uri req-uri))
-         (prefix (make-instance 'puri:uri
-                                :scheme (puri:uri-scheme uri)
-                                :host   (puri:uri-host uri)
-                                :port   (puri:uri-port uri)
-                                :path   *prefix*)))
-    (setf (puri:uri-parsed-path uri)
-          (cons (car (puri:uri-parsed-path uri))
-                (remove-prefix (cdr (puri:uri-parsed-path prefix))
-                               (cdr (puri:uri-parsed-path uri)))))
-    (or (puri:uri-path uri) "/")))
+  "given a URL string, returns the path with *prefix* removed"
+  (namestring
+   (let* ((uri-path-list (path-components (quri:uri-path (quri:uri req-uri))))
+          (prefix-path-list (path-components *prefix*))
+          (reduced-path (remove-prefix prefix-path-list uri-path-list)))
+     (uiop:make-pathname* :directory (cons :absolute reduced-path)))))
+
+
+(defun path-components (pathstring)
+  "splits a path string into it's components as a list"
+  (let* ((path (uiop:parse-unix-namestring pathstring))
+         (name (pathname-name path))
+         (dirlist (cdr (pathname-directory path))))
+    (if name
+        (nconc dirlist (list name))
+        dirlist)))
+
 
 
 (defun lookup-meta (key meta)
