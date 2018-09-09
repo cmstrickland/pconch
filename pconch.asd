@@ -4,7 +4,7 @@
   :author "cms"
   :serial t
   :depends-on ("osicat" "cl-who" "hunchentoot" "quri" "lquery" "array-utils"
-                "clss" "plump" "trivial-indent" "uiop" "myway"
+                "clss"  "trivial-indent" "uiop" "myway"
                 "cl-ppcre" "cl-markdown" "clache" "local-time" "bordeaux-threads"
                 )
   :components (
@@ -15,7 +15,6 @@
                (:file "post")
                (:file "util")
                (:file "range")
-               (:file "plump")
                (:file "routes")
                (:file "dates")
                (:file "markdown")
