@@ -3,7 +3,7 @@
   :version "0.0.1"
   :author "cms"
   :serial t
-  :depends-on ("osicat" "cl-who" "hunchentoot" "quri" "lquery" "array-utils"
+  :depends-on ( "prove" "prove-asdf" "osicat" "cl-who" "hunchentoot" "quri" "lquery" "array-utils"
                 "clss"  "trivial-indent" "uiop" "myway"
                 "cl-ppcre" "cl-markdown" "clache" "local-time" "bordeaux-threads"
                 )
