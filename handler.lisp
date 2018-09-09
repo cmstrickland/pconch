@@ -35,7 +35,9 @@
   "returns truthily if the requested resource path represents a
 serveable resource"
   (with-open-file (f path :if-does-not-exist nil :external-format :utf-8)
-    (if f (not (resource-stale f)) nil)))
+    (if f
+        (not (resource-stale f))
+        nil)))
 
 (defun serve-file (path)
   "Just serve a file over http. First sexp is metadata, second is
@@ -196,9 +198,11 @@ place as a serveable resource for every secondary category / tag"
 
 
 (defun category-url (category)
-  (let ((u (quri:uri *base*)))
-    (setf (quri:uri-path u)
-          (concatenate 'string *prefix* category))
+  (let
+      ((u (quri:uri *base*)))
+    (setf
+     (quri:uri-path u)
+     (concatenate 'string *prefix* category))
     u))
   
 (defun category-link (category)
@@ -217,7 +221,8 @@ place as a serveable resource for every secondary category / tag"
         (*last-request* hunchentoot:*request*)
         (*script-name* (hunchentoot::script-name*)))
     (multiple-value-bind (response value)
-        (myway:dispatch router (decode-path (hunchentoot:request-uri hunchentoot:*request*)))
+        (myway:dispatch router (decode-path
+                                (hunchentoot:request-uri hunchentoot:*request*)))
       response )))
 
 
