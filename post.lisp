@@ -23,11 +23,6 @@ followed by at least one blank line, and then some content"
      initially (push (cons :filename (list (file-namestring open-file)))
                      (headers post))
      until (eq line :EOF) do
-       ;; (format t "~a ~a ~a -> ~a ~%"
-       ;; 	       (list-length (headers post))
-       ;; 	       headers-finished
-       ;; 	       (blank-line line)
-       ;; 	       line)
        (cond ((blank-line line)      (progn
 				       (if (> (list-length (headers post)) 1)
 					   (setf headers-finished t))
@@ -97,7 +92,7 @@ followed by at least one blank line, and then some content"
   ;; uses the date to sort the post list so memoize these results for a short time
   ;; so that the sort across all posts can benefit from cached date strings
   (clache:with-inline-cache ((format nil "~A~A" (resource-name post) format) :expire 120)
-      (let ((date  
+      (let ((date
              (car (post-header-getdefault
                    post :date
                    (car (formatted-date (file-write-date (source-file-path (resource-name post)))))))))
@@ -149,24 +144,57 @@ followed by at least one blank line, and then some content"
                                          :name (resource-name post)))))
     (quri:render-uri base-url)))
 
+
 (defmethod render ((post post) &optional (template "post"))
-  (lquery:$ (initialize (template-path template)))
-  (lquery:$ "title" (text (title post)))
-  (lquery:$ "section.post-content" (replace-with (html-content post)))
-  (lquery:$ "a.permalink" (replace-with  (format nil "<h1 class=\"column\">~a</h1>" (title post))))
-  (lquery:$ "span.dateline" (text (post-date post :format :short)))
-  (lquery:$ "ul.post-attribution"
-            (replace-with
-             (format nil "<span>posted by <a class=\"p-author h-card\" rel=\"me\" href=\"/\">~a</a></span>~%
-                          <span> on <time class=\"dt-published\" datetime=\"~a\">~a</time></span>"
-                     (car(post-author post)) (post-date post :format :iso8601) (post-date post))))
-  (lquery:$ ".navigation .menu li"
-            (replace-with 
-             (format nil "~{~a~}"
-                     (mapcar (lambda (c)
-                               (format nil "<li class=\"category-menu\">~a</li>" (category-link c)))
-                             (post-tagify post)))))
-  (elt (lquery:$ (serialize)) 0))
+  (let ((doc (lquery:$ (initialize (template-path template))))
+        (meta-tags (mapcar (lambda (h)
+                             (plump:first-child
+                              (plump:parse
+                               (format nil "<meta name=\"PCONCH-~a\" content=\"~a\">"
+                                       (car h) (cdr h)))))
+                           (headers post))))
+    (elt  (lquery:$ doc "head"
+                    (append meta-tags)
+
+                    "title"
+                    (text (title post))
+
+                    doc "section.post-content"
+                    (replace-with (html-content post))
+
+                    doc "a.permalink"
+                    (replace-with (htmlstr
+                                   (:h1 :class "column"
+                                        (cl-who:str (title post)))))
+
+                    doc "span.dateline"
+                    (text (post-date post :format :short))
+
+                    doc "ul.post-attribution"
+                    (replace-with
+                     (htmlstr (:span "posted by "
+                                     (:a
+                                      :class "p-author h-card"
+                                      :rel "me"
+                                      :href "/"
+                                      (cl-who:str (car (post-author post)))))
+                              (:span " on "
+                                     (:time
+                                      :class "dt-published"
+                                      :datetime (post-date post)
+                                      (cl-who:str (post-date post))))))
+
+                    doc ".navigation .menu li"
+                    (replace-with
+                     (format nil "~{~a~}"
+                             (mapcar
+                              (lambda (c)
+                                (htmlstr (:li
+                                          :class "category-menu"
+                                          (cl-who:str (category-link c)))))
+                              (post-tagify post))))
+
+                    doc (serialize)) 0)))
 
 (defmethod header ((post post) header)
   (cdr (assoc header (headers post))))
@@ -178,10 +206,10 @@ followed by at least one blank line, and then some content"
 
 (defmethod post-categorize ((post post))
   (post-header-getdefault post :category "uncategorized"))
-
+()
 
 (defmethod post-tagify ((post post))
-  "return a list of all tags attached to the post header concatenated onto 
+  "return a list of all tags attached to the post header concatenated onto
 the result of post-categorize"
   (append (post-categorize post)
           (header post :tags)))
@@ -189,3 +217,8 @@ the result of post-categorize"
 (defmethod post-equal ((post post) (other post))
   (equal (slot-value post 'content)
          (slot-value other 'content)))
+
+
+(defmacro htmlstr (&rest body)
+  (let ((s (gensym)))
+    `(cl-who:with-html-output-to-string (,s),@body)))
