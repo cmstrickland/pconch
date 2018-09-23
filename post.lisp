@@ -13,6 +13,10 @@ header followed by strings of all the header values "
 (defun add-raw-content  (line)
   (format nil "content ~a~%" line))
 
+(defmacro htmlstr (&rest body)
+  (let ((s (gensym)))
+    `(cl-who:with-html-output-to-string (,s),@body)))
+
 (defun read-post (open-file)
   "parse a .post file
 expect a series of headers being a line with a heading and a :
@@ -218,6 +222,3 @@ the result of post-categorize"
          (slot-value other 'content)))
 
 
-(defmacro htmlstr (&rest body)
-  (let ((s (gensym)))
-    `(cl-who:with-html-output-to-string (,s),@body)))
