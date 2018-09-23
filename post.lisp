@@ -153,48 +153,48 @@ followed by at least one blank line, and then some content"
                                (format nil "<meta name=\"PCONCH-~a\" content=\"~a\">"
                                        (car h) (cdr h)))))
                            (headers post))))
-    (elt  (lquery:$ doc "head"
-                    (append meta-tags)
+    (lquery:$1 doc "head"
+                     (append meta-tags)
 
-                    "title"
-                    (text (title post))
+                     "title"
+                     (text (title post))
 
-                    doc "section.post-content"
-                    (replace-with (html-content post))
+                     doc "section.post-content"
+                     (replace-with (html-content post))
 
-                    doc "a.permalink"
-                    (replace-with (htmlstr
-                                   (:h1 :class "column"
-                                        (cl-who:str (title post)))))
+                     doc "a.permalink"
+                     (replace-with (htmlstr
+                                    (:h1 :class "column"
+                                         (cl-who:str (title post)))))
 
-                    doc "span.dateline"
-                    (text (post-date post :format :short))
+                     doc "span.dateline"
+                     (text (post-date post :format :short))
 
-                    doc "ul.post-attribution"
-                    (replace-with
-                     (htmlstr (:span "posted by "
-                                     (:a
-                                      :class "p-author h-card"
-                                      :rel "me"
-                                      :href "/"
-                                      (cl-who:str (car (post-author post)))))
-                              (:span " on "
-                                     (:time
-                                      :class "dt-published"
-                                      :datetime (post-date post)
-                                      (cl-who:str (post-date post))))))
+                     doc "ul.post-attribution"
+                     (replace-with
+                      (htmlstr (:span "posted by "
+                                      (:a
+                                       :class "p-author h-card"
+                                       :rel "me"
+                                       :href "/"
+                                       (cl-who:str (car (post-author post)))))
+                               (:span " on "
+                                      (:time
+                                       :class "dt-published"
+                                       :datetime (post-date post)
+                                       (cl-who:str (post-date post))))))
 
-                    doc ".navigation .menu li"
-                    (replace-with
-                     (format nil "~{~a~}"
-                             (mapcar
-                              (lambda (c)
-                                (htmlstr (:li
-                                          :class "category-menu"
-                                          (cl-who:str (category-link c)))))
-                              (post-tagify post))))
+                     doc ".navigation .menu li"
+                     (replace-with
+                      (format nil "~{~a~}"
+                              (mapcar
+                               (lambda (c)
+                                 (htmlstr (:li
+                                           :class "category-menu"
+                                           (cl-who:str (category-link c)))))
+                               (post-tagify post))))
 
-                    doc (serialize)) 0)))
+                     doc (serialize))))
 
 (defmethod header ((post post) header)
   (cdr (assoc header (headers post))))
