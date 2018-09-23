@@ -164,8 +164,7 @@ followed by at least one blank line, and then some content"
 
                      doc "a.permalink"
                      (replace-with (htmlstr
-                                    (:h1 :class "column"
-                                         (cl-who:str (title post)))))
+                                    (:h1 :class "column" (cl-who:str (title post)))))
 
                      doc "span.dateline"
                      (text (post-date post :format :short))
