@@ -1,0 +1,10 @@
+Package: pconch
+Version: 0.1-1
+Architecture: amd64
+Maintainer: cms <cms@beatworm.co.uk>
+Installed-Size: 10
+Section: unknown
+Priority: optional
+Homepage: https://git.beatworm.co.uk/pconch
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>
