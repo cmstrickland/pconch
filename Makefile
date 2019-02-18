@@ -16,3 +16,6 @@ distclean: clean
 
 deb: distclean
 	debuild -uc -us -b
+
+install:
+	install -D build/pconch/pconch $(DESTDIR)/pconch/pconch
