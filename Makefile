@@ -1,21 +1,11 @@
 SHELL = /bin/sh
-HOME = build/pconch/
-QL = ($HOME)/quicklisp
-QL_LOCAL = $(QL)/local-projects
 
-.PHONY: clean distclean all quicklisp
+.PHONY: clean distclean pconch all install
 
-$(QL)/setup.lisp:
-	sbcl --load "/usr/share/cl-quicklisp/quicklisp.lisp" --eval '(progn (quicklisp-quickstart:install) (quit))'
+build/pconch/pconch: $(wildcard *lisp)
+	./build.sh
 
-quicklisp: $(QL)/setup.lisp
-
-quicklisp-local:
-	$(mkdir -p $QL_LOCAL)
-	touch $QL_LOCAL/banksy
-
-pconch: quicklisp quicklisp-local
-	$(mkdir -p $HOME)
+pconch: build/pconch/pconch
 
 all: pconch
 
