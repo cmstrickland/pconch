@@ -1,5 +1,5 @@
 SHELL = /bin/sh
-appdir = $(DESTDIR)/pconch
+APPDIR = $(DESTDIR)/pconch
 
 .PHONY: clean distclean pconch all install deb
 
@@ -19,5 +19,5 @@ deb: pconch
 	debuild -uc -us -b
 
 install:
-	mkdir -p $(appdir)/posts $(appdir)/html
-	install -D build/pconch/pconch $(appdir)/pconch
+	mkdir -p $(APPDIR)/posts $(APPDIR)/html
+	install -D build/pconch/pconch $(APPDIR)/pconch
