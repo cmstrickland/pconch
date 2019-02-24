@@ -2,7 +2,7 @@ Source: pconch
 Section: unknown
 Priority: optional
 Maintainer: cms <cms@beatworm.co.uk>
-Build-Depends: debhelper (>= 11), sbcl, cl-quicklisp, gcc
+Build-Depends: debhelper (>= 11), sbcl, cl-quicklisp, gcc, adduser
 Standards-Version: 4.1.3
 Homepage: https://git.beatworm.co.uk/pconch
 Vcs-Browser: https://git.beatworm.co.uk/pconch
