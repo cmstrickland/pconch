@@ -17,9 +17,13 @@ set -e
 # for details, see https://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
-
 adduser --system pconch --home /pconch --quiet
-find /pconch -type d,f -exec chown pconch:www-data {} \;
+#find /pconch -type d,f -exec chown pconch:www-data {} \;
+
+for product in pconch html posts
+               do
+                   chown pconch:www-data "/pconch/$product"
+done
 
 case "$1" in
     configure)
