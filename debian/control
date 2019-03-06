@@ -2,7 +2,7 @@ Source: pconch
 Section: unknown
 Priority: optional
 Maintainer: cms <cms@beatworm.co.uk>
-Build-Depends: debhelper (>= 11), sbcl, cl-quicklisp, gcc, adduser
+Build-Depends: debhelper (>= 11), sbcl, cl-quicklisp, gcc
 Standards-Version: 4.1.3
 Homepage: https://git.beatworm.co.uk/pconch
 Vcs-Browser: https://git.beatworm.co.uk/pconch
@@ -10,6 +10,6 @@ Vcs-Git: https://git.beatworm.co.uk/pconch
 
 Package: pconch
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends} adduser
 Description: <insert up to 60 chars description>
  <insert long description, indented with spaces>
