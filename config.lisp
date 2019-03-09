@@ -4,7 +4,7 @@
 (defparameter *port* 2125)
 (defparameter *source-dir* #p"/pconch/posts/")
 (defparameter *www-dir* #p"/pconch/html/")
-(defparameter *template-dir* (merge-pathnames #p"./templates/" (asdf/system:system-source-directory 'pconch)))
+(defparameter *template-dir* #p "/usr/share/pconch/templates/") ;; needs override
 (defparameter *index-pager* 20)
 (defvar *last-request* nil)
 (defvar *script-name* nil)

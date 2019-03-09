@@ -20,10 +20,21 @@ set -e
 adduser --system pconch --home /pconch --quiet
 #find /pconch -type d,f -exec chown pconch:www-data {} \;
 
-for product in pconch html posts
+for product in pconch html posts html/.cache
                do
                    chown pconch:www-data "/pconch/$product"
 done
+
+if [ '0' -eq `ls -1 /pconch/posts/ | wc -l` ]
+then
+   cat <<EOF >/pconch/posts/test-post-safe-to-delete.post
+title: First post
+category: meta
+tags: test, blogging, internet, me, pconch
+
+Welcome to the first post of a pconch powered blog!
+EOF
+fi
 
 case "$1" in
     configure)
