@@ -1,4 +1,4 @@
-(load "~/asdf.lisp")
+;;(load "~/asdf.lisp")
 (load "~/quicklisp/setup.lisp")
 
 ;; fix quicklisp dist to something known to be sane
