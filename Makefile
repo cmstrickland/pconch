@@ -1,7 +1,7 @@
 SHELL = /bin/sh
 APPDIR = $(DESTDIR)/pconch
 override INSTALL = install
-
+unexport CFLAGS
 
 .PHONY: clean distclean pconch all install deb
 
@@ -17,7 +17,7 @@ clean:
 
 distclean: clean
 
-deb:
+deb: 
 	DEB_BUILD_OPTIONS='nostrip' debuild -uc -us -b
 
 install:
