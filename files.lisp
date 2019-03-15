@@ -13,8 +13,9 @@ specified category"
    *www-dir*))
 
 (defun file-link (src dst)
-  (handler-case
-      (osicat:make-link dst :target src ) (OSICAT-POSIX:EEXIST () nil)))
+  #-sbcl(handler-case
+            (osicat:make-link dst :target src ) (OSICAT-POSIX:EEXIST () nil))
+  #+sbcl (sb-posix:symlink src dst))
 
 (defun link-sub-category (subcat cat topic)
   "link the resource specified by category and topic to the resource
