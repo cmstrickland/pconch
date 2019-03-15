@@ -17,7 +17,7 @@ clean:
 
 distclean: clean
 
-deb: pconch
+deb:
 	DEB_BUILD_OPTIONS='nostrip' debuild -uc -us -b
 
 install:
