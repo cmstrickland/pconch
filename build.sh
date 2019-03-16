@@ -1,17 +1,21 @@
 #!/bin/bash
 export HOME=$PWD/build/pconch
 QL_LOCAL=$HOME/quicklisp/local-projects
-
+QL=${QL:-"/usr/share/cl-quicklisp"}
 mkdir -p $HOME
-sbcl --load "/usr/share/cl-quicklisp/quicklisp.lisp" --eval '
+sbcl --load "${QL}/quicklisp.lisp" --eval '
 (progn (quicklisp-quickstart:install)
 (quit))
 '
+
+SBCL_VERSION=$(sbcl --version | cut -d. -f2)
 mkdir -p $QL_LOCAL
 mkdir -p $QL_LOCAL/pconch
-curl -L http://www.method-combination.net/lisp/files/ironclad.tar.gz  | (cd $QL_LOCAL ; tar xzvf - ) 
-curl -L https://common-lisp.net/project/cffi/releases/cffi_latest.tar.gz | (cd $QL_LOCAL ; tar xzvf - )
-#sed -e'/pushnew :ironclad-assembly/ s/^/;/g' -i $QL_LOCAL/ironclad-0.45/src/package.lisp 
+if [ $SBCL_VERSION -lt "4" ]
+   then
+       curl -L http://www.method-combination.net/lisp/files/ironclad.tar.gz  | (cd $QL_LOCAL ; tar xzvf - ) 
+fi
+
 cp asdf.lisp $HOME
 cp *asd *.lisp $QL_LOCAL/pconch/
 cp sbcl-compile.lisp $HOME
