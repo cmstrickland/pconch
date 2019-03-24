@@ -3,7 +3,7 @@ APPDIR = $(DESTDIR)/pconch
 override INSTALL = install
 unexport CFLAGS
 
-.PHONY: clean distclean pconch all install deb
+.PHONY: clean distclean pconch all install deb version release
 
 build/pconch/pconch: $(wildcard *lisp)
 	./build.sh
@@ -16,6 +16,12 @@ clean:
 	rm -rf build
 
 distclean: clean
+
+
+version:
+	dch 'version bumped by make version' 
+
+release: version deb
 
 deb: 
 	DEB_BUILD_OPTIONS='nostrip' debuild -uc -us -b
