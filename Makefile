@@ -19,7 +19,7 @@ distclean: clean
 
 
 version:
-	dch 'version bumped by make version' 
+	dch -r 'version bumped by make version' 
 
 release: version deb
 
