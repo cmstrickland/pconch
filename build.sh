@@ -11,6 +11,7 @@ sbcl --load "${QL}/quicklisp.lisp" --eval '
 SBCL_VERSION=$(sbcl --version | cut -d. -f2)
 mkdir -p $QL_LOCAL
 mkdir -p $QL_LOCAL/pconch
+# older sbcl won't build the newest ironclad
 if [ $SBCL_VERSION -lt "4" ]
    then
        curl -L http://www.method-combination.net/lisp/files/ironclad.tar.gz  | (cd $QL_LOCAL ; tar xzvf - ) 
