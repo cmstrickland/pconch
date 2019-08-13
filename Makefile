@@ -3,9 +3,9 @@ APPDIR = $(DESTDIR)/pconch
 override INSTALL = install
 unexport CFLAGS
 
-.PHONY: clean distclean pconch all install
+.PHONY: clean distclean pconch all install manifest.txt
 
-pconch: $(wildcard *lisp)  build/pconch/pconch
+pconch: $(wildcard *lisp)  manifest.txt
 	buildapp --output $@ --manifest-file manifest.txt --entry 'pconch::main' \
 	--load-system cl-who \
 	--load-system hunchentoot \
@@ -22,6 +22,9 @@ pconch: $(wildcard *lisp)  build/pconch/pconch
 	--load-system local-time \
 	--load-system bordeaux-thread \
 	--load-system cl-who
+
+manifest.txt: pconch.asd
+	$(eval) '(ql:quickload :$(program)) (ql:write-asdf-manifest-file "manifest.txt")'
 
 all: pconch
 
