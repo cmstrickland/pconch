@@ -2,6 +2,7 @@ SHELL = /bin/sh
 APPDIR = $(DESTDIR)/pconch
 override INSTALL = install
 unexport CFLAGS
+eval = ros -Q -e
 
 .PHONY: clean distclean pconch all install manifest.txt
 
@@ -44,4 +45,4 @@ install:
 
 
 deb: distclean
-	gbp buildpackage --git-debian-branch=debian/buster --git-upstream-tree=upstream --git-force-create 
+	gbp buildpackage --git-debian-branch=debian/buster --git-upstream-tree=upstream --git-force-create
