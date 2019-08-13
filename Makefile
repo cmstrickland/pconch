@@ -25,7 +25,7 @@ pconch: $(wildcard *lisp)  manifest.txt
 	--load-system cl-who
 
 manifest.txt: pconch.asd
-	$(eval) '(ql:quickload :$(program)) (ql:write-asdf-manifest-file "manifest.txt")'
+	$(eval) '(ql:quickload :pconch) (ql:write-asdf-manifest-file "manifest.txt")'
 
 all: pconch
 
