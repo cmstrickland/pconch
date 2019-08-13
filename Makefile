@@ -22,7 +22,8 @@ pconch: $(wildcard *lisp)  manifest.txt
 	--load-system clache \
 	--load-system local-time \
 	--load-system bordeaux-threads \
-	--load-system cl-who
+	--load-system cl-who \
+	--load-system pconch
 
 manifest.txt: pconch.asd
 	$(eval) '(ql:quickload :pconch) (ql:write-asdf-manifest-file "manifest.txt")'
