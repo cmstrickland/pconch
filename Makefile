@@ -19,7 +19,7 @@ pconch: $(wildcard *lisp)  manifest.txt
 	--load-system myway \
 	--load-system cl-ppcre \
 	--load-system cl-markdown \
-	--load-system cl-clache \
+	--load-system clache \
 	--load-system local-time \
 	--load-system bordeaux-thread \
 	--load-system cl-who
