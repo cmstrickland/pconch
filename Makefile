@@ -7,7 +7,7 @@ eval = ros -Q -e
 .PHONY: clean distclean pconch all install manifest.txt
 
 pconch: $(wildcard *lisp)  manifest.txt
-	buildapp --output $@ --manifest-file manifest.txt --entry 'pconch::main' \
+	buildapp --output $@ --manifest-file manifest.txt --entry 'pconch:main' \
 	--load-system cl-who \
 	--load-system hunchentoot \
 	--load-system quri \
