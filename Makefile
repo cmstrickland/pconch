@@ -21,7 +21,7 @@ pconch: $(wildcard *lisp)  manifest.txt
 	--load-system cl-markdown \
 	--load-system clache \
 	--load-system local-time \
-	--load-system bordeaux-thread \
+	--load-system bordeaux-threads \
 	--load-system cl-who
 
 manifest.txt: pconch.asd
