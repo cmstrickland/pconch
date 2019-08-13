@@ -35,17 +35,6 @@ starts and stops it"
   (setup :root-prefix *prefix* :port *port*)
   (app :start))
 
-;; this function is used as the entry point for the compiled sbcl
-#+sbcl
-(defun main ()
-  (boot)
-  (sb-thread:join-thread
-   (find-if
-    (lambda (th)
-      (search  "hunchentoot-listener" (sb-thread:thread-name th)))
-    (sb-thread:list-all-threads))))
-
-
 (defun main ()
   (boot)
   (bordeaux-threads:join-thread
