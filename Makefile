@@ -3,12 +3,28 @@ APPDIR = $(DESTDIR)/pconch
 override INSTALL = install
 unexport CFLAGS
 
-.PHONY: clean distclean pconch all install deb version release
+.PHONY: clean distclean pconch all install manifest.txt
 
-build/pconch/pconch: $(wildcard *lisp)
-	./build.sh
+pconch: $(wildcard *lisp)  manifest.txt
+	buildapp --output $@ --manifest-file manifest.txt --entry 'pconch::main' \
+	--load-system cl-who \
+	--load-system hunchentoot \
+	--load-system quri \
+	--load-system lquery \
+	--load-system array-utils \
+	--load-system clss \
+	--load-system trivial-indent \
+	--load-system uiop \
+	--load-system myway \
+	--load-system cl-ppcre \
+	--load-system cl-markdown \
+	--load-system cl-clache \
+	--load-system local-time \
+	--load-system bordeaux-thread \
+	--load-system cl-who
 
-pconch: build/pconch/pconch
+manifest.txt: pconch.asd
+	$(eval) '(ql:quickload :$(program)) (ql:write-asdf-manifest-file "manifest.txt")'
 
 all: pconch
 
@@ -16,15 +32,7 @@ clean:
 	rm -rf build
 
 distclean: clean
-
-
-version:
-	dch -r 'version bumped by make version' 
-
-release: version deb
-
-deb: 
-	DEB_BUILD_OPTIONS='nostrip' debuild -uc -us -b
+	git clean -xfd
 
 install:
 	mkdir -p $(APPDIR)/posts $(APPDIR)/html $(APPDIR)/html/.cache
@@ -33,3 +41,7 @@ install:
 	install -D -d styles $(DESTDIR)/usr/share/pconch/templates/
 	cp -r templates/* $(DESTDIR)/usr/share/pconch/templates/
 	cp -r templates/styles/* $(DESTDIR)/usr/share/pconch/templates/styles/
+
+
+deb: distclean
+	gbp buildpackage --git-debian-branch=debian/buster --git-upstream-tree=upstream --git-force-create 
