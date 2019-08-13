@@ -1,5 +1,5 @@
 (defsystem "pconch"
-  :description "pconch is cms by cms"
+  :description "pconch is pconch by cms"
   :version "0.0.1"
   :author "cms"
   :serial t
