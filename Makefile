@@ -38,7 +38,7 @@ distclean: clean
 
 install:
 	mkdir -p $(APPDIR)/posts $(APPDIR)/html $(APPDIR)/html/.cache
-	install -D build/pconch/pconch $(APPDIR)/pconch
+	install -D pconch $(APPDIR)/pconch
 	install -D -d templates $(DESTDIR)/usr/share/pconch/
 	install -D -d styles $(DESTDIR)/usr/share/pconch/templates/
 	cp -r templates/* $(DESTDIR)/usr/share/pconch/templates/
