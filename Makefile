@@ -3,27 +3,13 @@ APPDIR = $(DESTDIR)/pconch
 override INSTALL = install
 unexport CFLAGS
 eval = ros -Q -e
+load-systems = $(shell ./scripts/parse-deps.lisp ./pconch.asd) --load-system pconch
 
 .PHONY: clean distclean pconch all install manifest.txt
 
 pconch: $(wildcard *lisp)  manifest.txt
 	buildapp --output $@ --manifest-file manifest.txt --entry 'pconch:main' \
-	--load-system cl-who \
-	--load-system hunchentoot \
-	--load-system quri \
-	--load-system lquery \
-	--load-system array-utils \
-	--load-system clss \
-	--load-system trivial-indent \
-	--load-system uiop \
-	--load-system myway \
-	--load-system cl-ppcre \
-	--load-system cl-markdown \
-	--load-system clache \
-	--load-system local-time \
-	--load-system bordeaux-threads \
-	--load-system cl-who \
-	--load-system pconch
+	$(load-systems)
 
 manifest.txt: pconch.asd
 	$(eval) '(ql:quickload :pconch) (ql:write-asdf-manifest-file "manifest.txt")'
