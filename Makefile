@@ -32,4 +32,4 @@ install:
 
 
 deb: distclean
-	gbp buildpackage --git-debian-branch=debian/buster --git-upstream-tree=upstream --git-force-create
+	dpkg-buildpackage -us -uc
