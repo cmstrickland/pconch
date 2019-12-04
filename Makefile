@@ -32,4 +32,4 @@ install:
 
 
 deb: distclean
-	dpkg-buildpackage -us -uc
+	dpkg-buildpackage -b -us -uc
