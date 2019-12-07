@@ -30,6 +30,9 @@ starts and stops it"
 
 (defun boot ()
   "stop the app if it's running, then start it up"
+  (let ((*package* (find-package :pconch)))
+    (load "local.lisp" :if-does-not-exist nil))
+  (format t "starting ~a ~a ~%" *prefix* *port*)
   (handler-case
       (app :stop)  (condition () nil))
   (setup :root-prefix *prefix* :port *port*)
