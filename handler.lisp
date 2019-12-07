@@ -107,12 +107,13 @@ place as a serveable resource for every secondary category / tag"
         posts)))
 
 
-(defmacro index-paginator (kind)
+
+(defmacro index-paginator-for-uri (kind uri)
   `(if ,kind
        (lquery:$ (inline  (concatenate 'string "div#paginator > ul.menu > li#"
                                        (symbol-name ',kind) "> a"))
                  (attr "hidden" nil "href"
-                       (add-params-to-uri (hunchentoot:request-uri*)
+                       (add-params-to-uri ,uri
                                           (pairlis '("start" "end")
                                                    (list (car ,kind) (cadr ,kind))) )))
        (lquery:$ (inline  (concatenate 'string  "div#paginator > ul > li#"
@@ -129,6 +130,30 @@ place as a serveable resource for every secondary category / tag"
     (setf (quri:uri-query-params surl) params)
     (quri:render-uri surl)))
 
+
+(defun gen-index-content (category range uri)
+  "given a category, a range and a page location, build HTML for an index page"
+  (let* ((index (build-index category))
+	     (index-length (length index))
+	     (range (truncate-range range index-length))
+	     (prev  (compute-prev range))
+	     (next  (compute-next range index-length)))
+	(if index
+	    (progn
+	      (lquery:$ (initialize (template-path "index"))
+			"h1#page-heading" (text *site-title*))
+	      (lquery:$
+		"ol#index-list > li"
+		(replace-with
+		 (format nil "~{<li class=\"index-entry h-entry\">~a</li>~%~}"
+			 (mapcar #'summary
+				 (subseq index (car range) (cadr range))))))
+	      (if category
+		  (lquery:$ "title" (text (format nil "Index of ~a" category))))
+	      (index-paginator-for-uri next uri)
+	      (index-paginator-for-uri prev uri)
+	      (lquery:$ (aref 0) (serialize))))))
+
 (defun serve-index (params)
   "serve an index page"
   (let ((range (compute-range (hunchentoot:get-parameters* *last-request*)))
@@ -138,27 +163,8 @@ place as a serveable resource for every secondary category / tag"
        (add-params-to-uri (hunchentoot:request-uri*) `(("start" . 0) ("end" . ,*index-pager*)))
         :code 302))
     (clache:with-cache ((cache-key (cache-version) "index" (hunchentoot:request-uri*)) :store *index-cache*)
-      (let* ((index (build-index category))
-	     (index-length (length index))
-	     (range (truncate-range range index-length))
-	     (prev  (compute-prev range))
-	     (next  (compute-next range index-length)))
-	(if index
-	    (progn
-	      (lquery:$ (initialize (template-path "index"))
-			"h1#page-heading" (text "beatworm.co.uk"))
-	      (lquery:$
-		"ol#index-list > li"
-		(replace-with
-		 (format nil "~{<li class=\"index-entry h-entry\">~a</li>~%~}"
-			 (mapcar #'summary
-				 (subseq index (car range) (cadr range))))))
-	      (if category
-		  (lquery:$ "title" (text (format nil "Index of ~a" category))))
-	      (index-paginator next)
-	      (index-paginator prev)
-	      (lquery:$ (aref 0) (serialize)))
-	    (serve-resource-not-found category))))))
+      (or (gen-index-content category range (hunchentoot:request-uri*))
+            (serve-resource-not-found category)))))
 
 (defun with-auth (domain handler params)
   (multiple-value-bind (auth-user auth-password)
