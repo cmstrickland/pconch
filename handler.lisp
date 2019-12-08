@@ -66,7 +66,7 @@ place as a serveable resource for every secondary category / tag"
         (let ((target (target-file-path category topic)))
           (ensure-directories-exist target)
           (with-open-file (of target
-			      :external-format :utf-8
+                              :external-format :utf-8
                               :direction :output
                               :if-exists :supersede)
             (prin1 meta of)
@@ -132,7 +132,8 @@ place as a serveable resource for every secondary category / tag"
 
 
 (defun list-sel-extend-with (list-sel content)
-  "extend a list element by adding a new node just like the last with the supplied html"
+  "extend a list element inside the current DOM by adding a new node
+just like the last with the supplied html"
   (lquery:$ list-sel
             (first)
             (clone)
@@ -144,25 +145,25 @@ place as a serveable resource for every secondary category / tag"
 (defun gen-index-content (category range uri)
   "given a category, a range and a page location, build HTML for an index page"
   (let* ((index (build-index category))
-	     (index-length (length index))
-	     (range (truncate-range range index-length))
-	     (prev  (compute-prev range))
-	     (next  (compute-next range index-length)))
-	(if index
-	    (progn
-	      (lquery:$ (initialize (template-path "index"))
-			"h1#page-heading" (text *site-title*))
-              ;; this map is actually a loop that modifies the list 
-              (mapcar (lambda (content)
-                        (list-sel-extend-with "ol#index-list > li" (summary content)))
-                      (subseq index (car range) (cadr range)))
-              ;; remove the example entry from the front of the list 
+             (index-length (length index))
+             (range (truncate-range range index-length))
+             (prev  (compute-prev range))
+             (next  (compute-next range index-length)))
+        (if index
+            (progn
+              (lquery:$ (initialize (template-path "index"))
+                        "h1#page-heading" (text *site-title*))
+              ;; extend the content list by adding summaries of every entry in range
+              (dolist (entry (subseq index (car range) (cadr range)))
+                (list-sel-extend-with "ol#index-list > li" (summary entry)))
+
+              ;; remove the example entry from the front of the list
               (lquery:$ "ol#index-list > li" (first) (remove))
-	      (if category
-		  (lquery:$ "title" (text (format nil "Index of ~a" category))))
-	      (index-paginator-for-uri next uri)
-	      (index-paginator-for-uri prev uri)
-	      (lquery:$ (aref 0) (serialize))))))
+              (if category
+                  (lquery:$ "title" (text (format nil "Index of ~a" category))))
+              (index-paginator-for-uri next uri)
+              (index-paginator-for-uri prev uri)
+              (lquery:$ (aref 0) (serialize))))))
 
 
 
@@ -188,7 +189,7 @@ place as a serveable resource for every secondary category / tag"
   (funcall handler params))
 
 (defun serve-drafts (params)
-    
+
   "<h1>Current Drafts</h1>")
 
 (defun serve-feed (params)
@@ -222,16 +223,16 @@ place as a serveable resource for every secondary category / tag"
      (quri:uri-path u)
      (concatenate 'string *prefix* category))
     u))
-  
+
 (defun category-link (category)
-  ;; FIXME - construct a proper URI 
+  ;; FIXME - construct a proper URI
   "return html for a hyperlink to a category index"
   (format nil "<a href=\"~a\" class=\"p-category\">~a</a>" (quri:render-uri (category-url category))
           category))
 
 (defun handler ()
   (let ((router (map-routes '(("/" serve-index)
-			      ("/feed/" serve-feed)
+                              ("/feed/" serve-feed)
                               ("@/pconch/drafts/" serve-drafts)
                               ("/?:category?/*.rss" serve-feed)
                               ("/:category/?" serve-index)
@@ -242,5 +243,3 @@ place as a serveable resource for every secondary category / tag"
         (myway:dispatch router (decode-path
                                 (hunchentoot:request-uri hunchentoot:*request*)))
       response )))
-
-
