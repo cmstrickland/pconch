@@ -194,6 +194,7 @@ just like the last with the supplied html"
 
 (defun serve-feed (params)
   "serve an rss feed"
+  (setf (hunchentoot:content-type*) "application/rss+xml")
   (let ((range '(0 20))
         (category (getf params :category))
         (plump:*tag-dispatchers* plump:*xml-tags*))
