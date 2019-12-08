@@ -131,6 +131,16 @@ place as a serveable resource for every secondary category / tag"
     (quri:render-uri surl)))
 
 
+(defun list-sel-extend-with (list-sel content)
+  "extend a list element by adding a new node just like the last with the supplied html"
+  (lquery:$ list-sel
+            (first)
+            (clone)
+            (html content)
+            (append-to (lquery:$ list-sel
+                                 (first)
+                                 (parent)))))
+
 (defun gen-index-content (category range uri)
   "given a category, a range and a page location, build HTML for an index page"
   (let* ((index (build-index category))
@@ -142,17 +152,19 @@ place as a serveable resource for every secondary category / tag"
 	    (progn
 	      (lquery:$ (initialize (template-path "index"))
 			"h1#page-heading" (text *site-title*))
-	      (lquery:$
-		"ol#index-list > li"
-		(replace-with
-		 (format nil "~{<li class=\"index-entry h-entry\">~a</li>~%~}"
-			 (mapcar #'summary
-				 (subseq index (car range) (cadr range))))))
+              ;; this map is actually a loop that modifies the list 
+              (mapcar (lambda (content)
+                        (list-sel-extend-with "ol#index-list > li" (summary content)))
+                      (subseq index (car range) (cadr range)))
+              ;; remove the example entry from the front of the list 
+              (lquery:$ "ol#index-list > li" (first) (remove))
 	      (if category
 		  (lquery:$ "title" (text (format nil "Index of ~a" category))))
 	      (index-paginator-for-uri next uri)
 	      (index-paginator-for-uri prev uri)
 	      (lquery:$ (aref 0) (serialize))))))
+
+
 
 (defun serve-index (params)
   "serve an index page"
