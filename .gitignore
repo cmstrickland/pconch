@@ -1,2 +1,3 @@
 *.*fsl
 build/
+local.lisp
