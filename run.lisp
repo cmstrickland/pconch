@@ -2,8 +2,6 @@
 ;; these are dependent on config values so set them here
 ;; which is safely post-configuration
 (defparameter *cache-dir* (cl-fad:merge-pathnames-as-directory *www-dir* #p".cache/"))
-(defparameter *index-cache* (make-instance 'clache:file-store :directory *cache-dir*))
-(defparameter *cache-version* (dir-mtime *source-dir*))
 
 
 
@@ -32,6 +30,9 @@ starts and stops it"
   "stop the app if it's running, then start it up"
   (let ((*package* (find-package :pconch)))
     (load "local.lisp" :if-does-not-exist nil))
+  (defparameter *index-cache* (make-instance 'clache:file-store :directory *cache-dir*))
+  (defparameter *cache-version* (dir-mtime *source-dir*))
+
   (format t "starting ~a ~a ~%" *prefix* *port*)
   (handler-case
       (app :stop)  (condition () nil))
