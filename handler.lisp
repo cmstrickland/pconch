@@ -131,12 +131,13 @@ place as a serveable resource for every secondary category / tag"
     (quri:render-uri surl)))
 
 
-(defun list-sel-extend-with (list-sel content)
+(defun list-sel-extend-with (list-sel content class)
   "extend a list element inside the current DOM by adding a new node
 just like the last with the supplied html"
   (lquery:$ list-sel
             (first)
             (clone)
+            (add-class class)
             (html content)
             (append-to (lquery:$ list-sel
                                  (first)
@@ -155,7 +156,7 @@ just like the last with the supplied html"
                         "h1#page-heading" (text *site-title*))
               ;; extend the content list by adding summaries of every entry in range
               (dolist (entry (subseq index (car range) (cadr range)))
-                (list-sel-extend-with "ol#index-list > li" (summary entry)))
+                (list-sel-extend-with "ol#index-list > li" (summary entry) (post-type entry)))
 
               ;; remove the example entry from the front of the list
               (lquery:$ "ol#index-list > li" (first) (remove))

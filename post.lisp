@@ -66,7 +66,7 @@ followed by at least one blank line, and then some content"
 (defun summarize-html (post &key (template "post") (selector "article"))
   (let ((lquery:*lquery-master-document*))
     (lquery:$ (initialize (template-path template))
-              selector "#content section.post-content" (replace-with (html-content post)))
+              selector "div.content section.post-content" (replace-with (html-content post)))
     (lquery:$ selector (attr :class (post-type post)))
     (lquery:$ selector ".permalink" (attr :href (url post)) (text (title post)))
     (lquery:$ selector ".dateline" (text (post-date post :format :short)))
@@ -113,7 +113,7 @@ followed by at least one blank line, and then some content"
       (multiple-value-bind (_ markup) (cl-markdown:markdown (content post) :stream nil)
 	markup)))
 
-(DEFMETHOD summary ((post post) &key (content-type "html"))
+(defmethod summary ((post post) &key (content-type "html"))
   (cond ((string-equal content-type "html") (summarize-html post))
         ((string-equal content-type "rss")  (summarize-rss post))))
 
@@ -168,7 +168,7 @@ followed by at least one blank line, and then some content"
 
                      doc "a.permalink"
                      (replace-with (htmlstr
-                                    (:h1 :class "column" (cl-who:str (title post)))))
+                                    (:h2 :class "p-title" (cl-who:str (title post)))))
 
                      doc "span.dateline"
                      (text (post-date post :format :short))

@@ -1,3 +1,9 @@
+pconch (0.1-1.1) UNRELEASED; urgency=medium
+
+  * Non-maintainer upload.
+
+ -- Colin M Strickland <cms@blink.beatworm.co.uk>  Sun, 26 Apr 2020 16:47:25 +0100
+
 pconch (0.1-1) unstable; urgency=medium
 
   * Initial release - first attempt at debian packaging
