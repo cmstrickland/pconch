@@ -78,7 +78,7 @@ is a keyword and the cdr is whitespace trimmed"
                        #-sbcl(osicat-posix:stat-mtime (osicat-posix:stat f))
                        #+sbcl (sb-posix:stat-mtime (sb-posix:stat f))
                        )
-                     (uiop:directory-files (uiop:merge-pathnames* pathstring "*")))
+                     (uiop:directory-files pathstring))
              #'>)))
 
 
