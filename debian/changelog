@@ -1,3 +1,14 @@
+pconch (0.2) UNRELEASED; urgency=medium
+
+  * redesign layout
+  replace zurb foundation with hand-written CSS. Also remove most foundation classes from the html skeletons
+  also involves a few lquery changes
+
+  * fix bug with directory mtime
+  i was using merge paths a bit oddly to make a directory wildcard path, and uiop seems to have changed in a breaking way
+
+ -- Colin M Strickland <cms@blink.beatworm.co.uk>  Sun, 26 Apr 2020 16:47:25 +0100
+
 pconch (0.1-1.1) UNRELEASED; urgency=medium
 
   * Non-maintainer upload.

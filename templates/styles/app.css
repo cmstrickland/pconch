@@ -111,7 +111,7 @@ footer ul.menu {
     font-size: .5rem;
 }
 
-a > img{ display: block; border: 2px solid white; border-radius: 8px; filter:brightness(95%);}
+a > img{ display: inline; border: 2px solid white; border-radius: 8px; filter:brightness(95%);}
 a > img:hover { filter: brightness(100%); }
 
 li.post + li.short-post { margin-top: 4rem; }
