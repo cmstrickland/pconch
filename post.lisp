@@ -214,8 +214,10 @@ followed by at least one blank line, and then some content"
 (defmethod post-tagify ((post post))
   "return a list of all tags attached to the post header concatenated onto
 the result of post-categorize"
-  (append (post-categorize post)
-          (header post :tags)))
+  (unless (member (car (post-categorize post)) (header post :tags))
+    (append (post-categorize post)
+            (header post :tags))
+    (header post :tags)))
 
 (defmethod post-equal ((post post) (other post))
   (equal (slot-value post 'content)

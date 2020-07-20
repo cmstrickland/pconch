@@ -73,8 +73,7 @@ place as a serveable resource for every secondary category / tag"
             (print (render post) of))
           (mapcar (lambda (f) (link-sub-category f category topic))
                   (remove-if (lambda (f) (equal f category))
-                             (append (header post :tags)
-                                     (header post :category)))) t))))
+                             (post-tagify post))) t))))
 
 (defun publish-resource (category topic)
   "turn a request cat / topic tuple into a call to publish file"
