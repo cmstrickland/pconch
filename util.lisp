@@ -39,22 +39,13 @@ is a keyword and the cdr is whitespace trimmed"
     (t  (not(some (lambda (c) (not (whitespace-char-p c))) line)))))
 
 
-
 (defun csv-list (str)
   "split a string of comma separated values into a list"
-  (loop for c across str
-     with word = (make-array 32
-                             :fill-pointer 0
-                             :adjustable t
-                             :element-type 'character)
-     with wordlist
-     counting c into pos
-     do (unless (eq c #\,) (vector-push-extend c word))
-     do (if (or (eq c #\,) (eq pos (length str)))
-            (progn
-              (push (string-trim '(#\Space) word) wordlist)
-              (setf (fill-pointer word) 0)))
-     finally (return (reverse wordlist))))
+  (remove-if
+   (lambda (s) (string-equal "" s))
+   (mapcar
+    (lambda (s) (string-trim '(#\Space #\Tab) s))
+    (split-sequence:SPLIT-SEQUENCE #\, str))))
 
 (defun empty-subject (thing)
   (or (not thing)
