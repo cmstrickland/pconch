@@ -17,7 +17,7 @@ manifest.txt: pconch.asd
 all: pconch
 
 clean:
-	rm -rf build
+	rm -rf build manifest.txt pconch
 
 distclean: clean
 	git clean -xfd
