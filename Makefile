@@ -2,7 +2,7 @@ SHELL = /bin/sh
 APPDIR = $(DESTDIR)/pconch
 override INSTALL = install
 unexport CFLAGS
-eval = ros -Q -e
+eval = sbcl --non-interactive --eval
 load-systems = $(shell ./scripts/parse-deps.lisp ./pconch.asd) --load-system pconch
 
 .PHONY: clean distclean pconch all install manifest.txt versionbump release
@@ -12,7 +12,7 @@ pconch: $(wildcard *lisp)  manifest.txt
 	$(load-systems)
 
 manifest.txt: pconch.asd
-	$(eval) '(ql:quickload :pconch) (ql:write-asdf-manifest-file "manifest.txt")'
+	$(eval) '(progn (push (truename #p".") asdf:*central-registry* )(ql:quickload :pconch) (ql:write-asdf-manifest-file "manifest.txt"))'
 
 all: pconch
 
