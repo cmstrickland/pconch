@@ -3,7 +3,7 @@
   :version "0.0.1"
   :author "cms"
   :serial t
-  :depends-on ( "prove" #-sbcl"osicat" "cl-who"
+  :depends-on (  #-sbcl"osicat" "cl-who"
                         "hunchentoot" "quri" "lquery" "array-utils"
                         "clss"  "trivial-indent" "uiop" "myway"
                         "cl-ppcre" "cl-markdown" "clache" "local-time"
