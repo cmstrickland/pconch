@@ -39,7 +39,8 @@ starts and stops it"
   (setup :root-prefix *prefix* :port *port*)
   (app :start))
 
-(defun main (args)
+(defun main ()
+  "entrypoint for the finished app"
   (boot)
   (bordeaux-threads:join-thread
    (find-if

@@ -3,21 +3,20 @@ APPDIR = $(DESTDIR)/pconch
 override INSTALL = install
 unexport CFLAGS
 eval = sbcl --non-interactive --eval
-load-systems = $(shell ./scripts/parse-deps.lisp ./pconch.asd) --load-system pconch
 
 .PHONY: clean distclean pconch all install manifest.txt versionbump release
 
-pconch: $(wildcard *lisp)  manifest.txt
-	buildapp --output $@ --manifest-file manifest.txt --entry 'pconch:main' \
-	$(load-systems)
+.deps: *.lisp
+	$(eval) "(ql:quickload 'pconch)"
+	touch .deps
 
-manifest.txt: pconch.asd
-	$(eval) '(progn (push (truename #p".") asdf:*central-registry* )(ql:quickload :pconch) (ql:write-asdf-manifest-file "manifest.txt"))'
+pconch: .deps
+	$(eval) "(asdf:make 'pconch)"
 
 all: pconch
 
 clean:
-	rm -rf build manifest.txt pconch
+	rm -rf build manifest.txt pconch .deps
 
 distclean: clean
 	git clean -xfd
@@ -33,7 +32,7 @@ install:
 versionbump:
 	dch -i ''
 	git add debian/changelog
-	git commit -m 'updating changelog from version bump build' 
+	git commit -m 'updating changelog from version bump build'
 
 release: versionbump deb
 

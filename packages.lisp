@@ -3,4 +3,4 @@
 ;;                 cl-ppcre cl-markdown clache local-time bordeaux-threads))
 (defpackage :pconch
   (:use :cl)
-  (:export :app :setup :boot))
+  (:export :main :app :setup :boot))

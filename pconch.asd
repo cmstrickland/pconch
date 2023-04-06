@@ -3,6 +3,9 @@
   :version "0.0.1"
   :author "cms"
   :serial t
+  :build-operation "program-op"
+  :build-pathname "pconch"
+  :entry-point "pconch:main"
   :depends-on (  #-sbcl"osicat" "cl-who"
                         "hunchentoot" "quri" "lquery" "array-utils"
                         "clss"  "trivial-indent" "uiop" "myway"
