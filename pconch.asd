@@ -11,7 +11,8 @@
                         "clss"  "trivial-indent" "uiop" "myway"
                         "cl-ppcre" "cl-markdown" "clache" "local-time"
                         "bordeaux-threads" "cl-who"
-                )
+                       )
+  :in-order-to ((test-op (test-op "pconch/tests")))
   :components (
                (:file "packages")
                (:file "config")
@@ -25,3 +26,10 @@
                (:file "markdown")
                (:file "run")))
 
+(defsystem "pconch/tests"
+  :description "test suite for pconch"
+  :depends-on ("fiveam")
+  :pathname "tests"
+  :perform (test-op (op c)
+                    (symbol-call :fiveam :run! (find-symbol* :all-tests :pconch/tests)))
+  :components ((:file "tests")))
