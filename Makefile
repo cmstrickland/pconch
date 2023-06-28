@@ -28,13 +28,3 @@ install:
 	install -D -d styles $(DESTDIR)/usr/share/pconch/templates/
 	cp -r templates/* $(DESTDIR)/usr/share/pconch/templates/
 	cp -r templates/styles/* $(DESTDIR)/usr/share/pconch/templates/styles/
-
-versionbump:
-	dch -i ''
-	git add debian/changelog
-	git commit -m 'updating changelog from version bump build'
-
-release: versionbump deb
-
-deb: distclean
-	dpkg-buildpackage -b -us -uc
