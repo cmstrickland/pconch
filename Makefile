@@ -21,7 +21,7 @@ clean:
 distclean: clean
 	git clean -xfd
 
-install:
+install: pconch
 	mkdir -p $(APPDIR)/posts $(APPDIR)/html $(APPDIR)/html/.cache
 	install -D pconch $(APPDIR)/pconch
 	install -D -d templates $(DESTDIR)/usr/share/pconch/
