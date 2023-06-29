@@ -28,3 +28,4 @@ install: pconch
 	install -D -d styles $(DESTDIR)/usr/share/pconch/templates/
 	cp -r templates/* $(DESTDIR)/usr/share/pconch/templates/
 	cp -r templates/styles/* $(DESTDIR)/usr/share/pconch/templates/styles/
+	mv templates/lorem.post $(APPDIR)/posts/
