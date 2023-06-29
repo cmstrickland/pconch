@@ -18,11 +18,17 @@
   "Create a default acceptor and bind pconch:app to a function that
 starts and stops it"
   (push  (hunchentoot:create-folder-dispatcher-and-handler "/static/styles/" (stylesheet-path) "text/css" ) hunchentoot:*dispatch-table*)
+  (swank-loader:init)
+  (setf swank::*loopback-interface* "0.0.0.0")
   (let ((ac (serve :port port :prefix root-prefix)))
     (setf (symbol-function 'app)
           #'(lambda (cmd)
-              (cond ((equal :start cmd) (hunchentoot:start ac))
-                    ((equal :stop  cmd) (hunchentoot:stop  ac)))))))
+              (cond ((equal :start cmd)
+                     (hunchentoot:start ac)
+                     (swank:create-server :port 4005 :style swank:*communication-style* :dont-close t))
+                    ((equal :stop  cmd)
+                     (hunchentoot:stop  ac)
+                     (swank:stop-server 4005)))))))
 
 
 
