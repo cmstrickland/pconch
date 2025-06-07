@@ -10,8 +10,9 @@
                         "hunchentoot" "quri" "lquery" "array-utils"
                         "clss"  "trivial-indent" "uiop" "myway"
                         "cl-ppcre" "cl-markdown" "clache" "local-time"
-                        "bordeaux-threads" "cl-who" "swank"
-                       )
+                        "bordeaux-threads" "cl-who"
+                 #-(or swank slynk) "swank"
+                 )
   :in-order-to ((test-op (test-op "pconch/tests")))
   :components (
                (:file "packages")
