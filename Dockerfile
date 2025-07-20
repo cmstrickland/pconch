@@ -21,7 +21,7 @@ RUN make clean && make
 
 # Runtime stage  
 FROM alpine:latest
-RUN apk add --no-cache zstd-libs bash curl net-tools
+RUN apk add --no-cache zstd-libs
 COPY --from=builder /src/pconch /pconch/pconch
 WORKDIR /pconch
 ENTRYPOINT ["/pconch/pconch"]
