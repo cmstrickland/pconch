@@ -2,7 +2,7 @@ SHELL = /bin/sh
 APPDIR = $(DESTDIR)/pconch
 override INSTALL = install
 unexport CFLAGS
-eval = sbcl --non-interactive --eval
+eval = sbcl --non-interactive --load ~/quicklisp/setup.lisp --eval
 
 .PHONY: clean distclean pconch all install manifest.txt versionbump release
 
