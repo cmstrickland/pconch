@@ -1,0 +1,18 @@
+stages:
+  -build
+  -push
+
+variables:
+  IMAGE_NAME: $CI_REGISTRY/$CI_PROJECT_PATH
+  IMAGE_TAG: $CI_COMMIT_SHA
+
+build-image:
+  stage: build
+  tags:
+    - podman
+    - KITT
+    - linux 
+  script:
+    - podman build -t $IMAGE_NAME:$IMAGE_TAG .
+    - podman build -t $IMAGE_NAME:latest .
+    
