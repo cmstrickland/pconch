@@ -1,18 +1,24 @@
 stages:
-  -build
-  -push
+  - build
+  - push
 
 variables:
   IMAGE_NAME: $CI_REGISTRY/$CI_PROJECT_PATH
   IMAGE_TAG: $CI_COMMIT_SHA
 
-build-image:
+build-and-push:
   stage: build
   tags:
     - podman
     - KITT
     - linux 
   script:
+    - echo $CI_REGISTRY_PASSWORD | podman login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - podman build -t $IMAGE_NAME:$IMAGE_TAG .
-    - podman build -t $IMAGE_NAME:latest .
-    
+    - podman push $IMAGE_NAME:$IMAGE_TAG
+    # Only tag and push 'latest' on main branch
+    - |
+      if [ "$CI_COMMIT_REF_NAME" = "main" ]; then
+        podman tag $IMAGE_NAME:$IMAGE_TAG $IMAGE_NAME:latest
+        podman push $IMAGE_NAME:latest
+      fi
