@@ -1,0 +1,56 @@
+image:
+  distribution: debian
+  release: trixie
+  description: Debian Trixie with pconch
+  architecture: amd64
+
+source:
+  downloader: debootstrap
+  same_as: trixie
+  url: http://deb.debian.org/debian
+  keys:
+    - 0x648ACFD622F3D138
+    - 0x0E98404D386FA1D9
+
+targets:
+  lxc:
+    create_message: |
+      Debian Trixie with pconch pre-installed.
+
+      To start pconch:
+        systemctl start pconch
+
+packages:
+  manager: apt
+  update: true
+  cleanup: true
+  sets:
+    - packages:
+        - systemd
+        - adduser
+        - ca-certificates
+
+actions:
+  - trigger: post-packages
+    action: |-
+      #!/bin/bash
+      set -eux
+
+      # Copy and install pconch .deb
+      if [ -f /tmp/pconch.deb ]; then
+        apt-get install -y /tmp/pconch.deb
+        rm /tmp/pconch.deb
+      fi
+
+  - trigger: post-packages
+    action: |-
+      #!/bin/bash
+      set -eux
+
+      # Enable pconch service if it exists
+      if [ -f /lib/systemd/system/pconch.service ]; then
+        systemctl enable pconch
+      fi
+
+mappings:
+  architecture_map: debian
