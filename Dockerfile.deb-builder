@@ -1,10 +1,11 @@
 FROM debian:trixie
 
-# Install debian build dependencies and Common Lisp libraries
+# Install debian build dependencies and available Common Lisp libraries
 RUN apt-get update && apt-get install -y \
     debhelper \
     sbcl \
     cl-asdf \
+    cl-quicklisp \
     gcc \
     devscripts \
     build-essential \
@@ -12,12 +13,17 @@ RUN apt-get update && apt-get install -y \
     cl-hunchentoot \
     cl-who \
     cl-ppcre \
-    cl-markdown \
     cl-bordeaux-threads \
-    cl-local-time \
-    cl-quri \
-    cl-array-utils \
     && rm -rf /var/lib/apt/lists/*
+
+# Initialize quicklisp for packages not in Debian
+RUN sbcl --non-interactive \
+    --load /usr/share/common-lisp/source/quicklisp/quicklisp.lisp \
+    --eval '(quicklisp-quickstart:install :path "/usr/local/quicklisp")' \
+    --eval '(quit)'
+
+ENV HOME=/root
+RUN echo '(load "/usr/local/quicklisp/setup.lisp")' > /root/.sbclrc
 
 WORKDIR /build
 

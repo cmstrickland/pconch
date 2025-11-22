@@ -7,27 +7,29 @@ unexport CFLAGS
 QUICKLISP_SETUP := $(shell \
 	if [ -f "$$HOME/quicklisp/setup.lisp" ]; then \
 		echo "$$HOME/quicklisp/setup.lisp"; \
-	elif [ -f /usr/share/cl-quicklisp/quicklisp.lisp ]; then \
-		echo /usr/share/cl-quicklisp/quicklisp.lisp; \
+	elif [ -f /usr/local/quicklisp/setup.lisp ]; then \
+		echo /usr/local/quicklisp/setup.lisp; \
+	elif [ -f /root/quicklisp/setup.lisp ]; then \
+		echo /root/quicklisp/setup.lisp; \
 	else \
-		echo /usr/share/cl-quicklisp/quicklisp.lisp; \
+		echo ""; \
 	fi)
 
 .PHONY: clean distclean pconch all install deb version release
 
 .deps: *.lisp
-	@if [ -f $(QUICKLISP_SETUP) ]; then \
+	@if [ -n "$(QUICKLISP_SETUP)" ] && [ -f "$(QUICKLISP_SETUP)" ]; then \
 		sbcl --non-interactive --load $(QUICKLISP_SETUP) --eval "(ql:quickload 'pconch)" --quit; \
 	else \
-		sbcl --non-interactive --eval "(require 'asdf)" --eval "(asdf:load-system 'pconch)" --quit; \
+		sbcl --non-interactive --eval "(ql:quickload 'pconch)" --quit; \
 	fi
 	touch .deps
 
 pconch: .deps
-	@if [ -f $(QUICKLISP_SETUP) ]; then \
+	@if [ -n "$(QUICKLISP_SETUP)" ] && [ -f "$(QUICKLISP_SETUP)" ]; then \
 		sbcl --non-interactive --load $(QUICKLISP_SETUP) --eval "(asdf:make 'pconch)" --quit; \
 	else \
-		sbcl --non-interactive --eval "(require 'asdf)" --eval "(asdf:make 'pconch)" --quit; \
+		sbcl --non-interactive --eval "(asdf:make 'pconch)" --quit; \
 	fi
 
 all: pconch
