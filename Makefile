@@ -19,7 +19,7 @@ clean:
 	rm -rf build manifest.txt pconch .deps
 
 distclean: clean
-	git clean -xfd
+	@if [ -d .git ]; then git clean -xfd; fi
 
 version:
 	dch -r 'version bumped by make version'
