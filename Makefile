@@ -4,7 +4,7 @@ override INSTALL = install
 unexport CFLAGS
 eval = sbcl --non-interactive --load ~/quicklisp/setup.lisp --eval
 
-.PHONY: clean distclean pconch all install manifest.txt versionbump release
+.PHONY: clean distclean pconch all install deb version release
 
 .deps: *.lisp
 	$(eval) "(ql:quickload 'pconch)"
@@ -20,6 +20,14 @@ clean:
 
 distclean: clean
 	git clean -xfd
+
+version:
+	dch -r 'version bumped by make version'
+
+release: version deb
+
+deb:
+	DEB_BUILD_OPTIONS='nostrip' debuild -uc -us -b
 
 install: pconch
 	mkdir -p $(APPDIR)/posts $(APPDIR)/html $(APPDIR)/html/.cache

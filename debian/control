@@ -1,0 +1,17 @@
+Source: pconch
+Section: web
+Priority: optional
+Maintainer: cms <cms@beatworm.co.uk>
+Build-Depends: debhelper-compat (= 13), sbcl, cl-quicklisp, gcc, devscripts, build-essential
+Standards-Version: 4.6.2
+Homepage: https://git.beatworm.co.uk/pconch
+Vcs-Browser: https://git.beatworm.co.uk/pconch
+Vcs-Git: https://git.beatworm.co.uk/pconch
+
+Package: pconch
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, adduser
+Description: Common Lisp web application server
+ pconch is a web application built with Common Lisp,
+ using Hunchentoot web server and various Common Lisp libraries
+ for serving web content.

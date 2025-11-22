@@ -1,0 +1,14 @@
+pconch (0.2-1) trixie; urgency=medium
+
+  * Updated for Debian Trixie (stable)
+  * Modernized build system using asdf:make
+  * Updated to debhelper-compat 13
+  * Improved debian package metadata
+
+ -- cms <cms@beatworm.co.uk>  Fri, 22 Nov 2025 18:00:00 +0000
+
+pconch (0.1-1) unstable; urgency=medium
+
+  * Initial release - first attempt at debian packaging
+
+ -- cms <cms@beatworm.co.uk>  Sun, 02 Dec 2018 12:27:23 +0000

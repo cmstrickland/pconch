@@ -1,0 +1,16 @@
+# pconch service
+[Unit]
+Description=pconch web service
+AssertPathExists=/pconch/pconch
+
+[Service]
+Type=simple
+User=pconch
+Group=www-data
+WorkingDirectory=/pconch
+ExecStart=/pconch/pconch
+Restart=on-failure
+Nice=5
+
+[Install]
+WantedBy=multi-user.target
