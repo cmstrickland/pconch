@@ -11,12 +11,6 @@ RUN apt-get update && apt-get install -y \
     fakeroot \
     && rm -rf /var/lib/apt/lists/*
 
-# Set up quicklisp for root user
-RUN sbcl --load /usr/share/cl-quicklisp/quicklisp.lisp \
-    --eval "(quicklisp-quickstart:install)" \
-    --eval "(ql:add-to-init-file)" \
-    --quit
-
 WORKDIR /build
 
 # Copy source files

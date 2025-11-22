@@ -2,16 +2,25 @@ SHELL = /bin/sh
 APPDIR = $(DESTDIR)/pconch
 override INSTALL = install
 unexport CFLAGS
-eval = sbcl --non-interactive --load ~/quicklisp/setup.lisp --eval
+
+# Try to find quicklisp in common locations
+QUICKLISP_SETUP := $(shell \
+	if [ -f ~/quicklisp/setup.lisp ]; then \
+		echo ~/quicklisp/setup.lisp; \
+	elif [ -f /usr/share/cl-quicklisp/quicklisp.lisp ]; then \
+		echo /usr/share/cl-quicklisp/quicklisp.lisp; \
+	else \
+		echo ~/quicklisp/setup.lisp; \
+	fi)
 
 .PHONY: clean distclean pconch all install deb version release
 
 .deps: *.lisp
-	$(eval) "(ql:quickload 'pconch)"
+	sbcl --non-interactive --load $(QUICKLISP_SETUP) --eval "(ql:quickload 'pconch)" --quit
 	touch .deps
 
 pconch: .deps
-	$(eval) "(asdf:make 'pconch)"
+	sbcl --non-interactive --load $(QUICKLISP_SETUP) --eval "(asdf:make 'pconch)" --quit
 
 all: pconch
 
