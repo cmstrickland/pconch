@@ -2,7 +2,7 @@ FROM debian:trixie
 
 # Install debian build dependencies
 RUN apt-get update && apt-get install -y \
-    debhelper-compat \
+    debhelper \
     sbcl \
     cl-quicklisp \
     gcc \
