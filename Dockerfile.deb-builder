@@ -30,6 +30,10 @@ WORKDIR /build
 # Copy source files
 COPY . /build/
 
+# Make pconch discoverable to ASDF via quicklisp local-projects
+RUN mkdir -p /usr/local/quicklisp/local-projects && \
+    ln -s /build /usr/local/quicklisp/local-projects/pconch
+
 # Build the .deb package
 RUN make clean && make deb
 
