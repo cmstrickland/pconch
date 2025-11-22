@@ -5,12 +5,12 @@ unexport CFLAGS
 
 # Try to find quicklisp in common locations
 QUICKLISP_SETUP := $(shell \
-	if [ -f ~/quicklisp/setup.lisp ]; then \
-		echo ~/quicklisp/setup.lisp; \
+	if [ -f "$$HOME/quicklisp/setup.lisp" ]; then \
+		echo "$$HOME/quicklisp/setup.lisp"; \
 	elif [ -f /usr/share/cl-quicklisp/quicklisp.lisp ]; then \
 		echo /usr/share/cl-quicklisp/quicklisp.lisp; \
 	else \
-		echo ~/quicklisp/setup.lisp; \
+		echo /usr/share/cl-quicklisp/quicklisp.lisp; \
 	fi)
 
 .PHONY: clean distclean pconch all install deb version release
