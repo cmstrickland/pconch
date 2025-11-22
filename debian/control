@@ -2,7 +2,20 @@ Source: pconch
 Section: web
 Priority: optional
 Maintainer: cms <cms@beatworm.co.uk>
-Build-Depends: debhelper-compat (= 13), sbcl, cl-quicklisp, gcc, devscripts, build-essential
+Build-Depends: debhelper-compat (= 13),
+ sbcl,
+ cl-asdf,
+ cl-hunchentoot,
+ cl-who,
+ cl-ppcre,
+ cl-markdown,
+ cl-bordeaux-threads,
+ cl-local-time,
+ cl-quri,
+ cl-array-utils,
+ gcc,
+ devscripts,
+ build-essential
 Standards-Version: 4.6.2
 Homepage: https://git.beatworm.co.uk/pconch
 Vcs-Browser: https://git.beatworm.co.uk/pconch

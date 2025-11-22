@@ -16,11 +16,19 @@ QUICKLISP_SETUP := $(shell \
 .PHONY: clean distclean pconch all install deb version release
 
 .deps: *.lisp
-	sbcl --non-interactive --load $(QUICKLISP_SETUP) --eval "(ql:quickload 'pconch)" --quit
+	@if [ -f $(QUICKLISP_SETUP) ]; then \
+		sbcl --non-interactive --load $(QUICKLISP_SETUP) --eval "(ql:quickload 'pconch)" --quit; \
+	else \
+		sbcl --non-interactive --eval "(require 'asdf)" --eval "(asdf:load-system 'pconch)" --quit; \
+	fi
 	touch .deps
 
 pconch: .deps
-	sbcl --non-interactive --load $(QUICKLISP_SETUP) --eval "(asdf:make 'pconch)" --quit
+	@if [ -f $(QUICKLISP_SETUP) ]; then \
+		sbcl --non-interactive --load $(QUICKLISP_SETUP) --eval "(asdf:make 'pconch)" --quit; \
+	else \
+		sbcl --non-interactive --eval "(require 'asdf)" --eval "(asdf:make 'pconch)" --quit; \
+	fi
 
 all: pconch
 

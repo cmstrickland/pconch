@@ -1,14 +1,22 @@
 FROM debian:trixie
 
-# Install debian build dependencies
+# Install debian build dependencies and Common Lisp libraries
 RUN apt-get update && apt-get install -y \
     debhelper \
     sbcl \
-    cl-quicklisp \
+    cl-asdf \
     gcc \
     devscripts \
     build-essential \
     fakeroot \
+    cl-hunchentoot \
+    cl-who \
+    cl-ppcre \
+    cl-markdown \
+    cl-bordeaux-threads \
+    cl-local-time \
+    cl-quri \
+    cl-array-utils \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /build
