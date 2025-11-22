@@ -1,0 +1,29 @@
+FROM debian:trixie
+
+# Install debian build dependencies
+RUN apt-get update && apt-get install -y \
+    debhelper-compat \
+    sbcl \
+    cl-quicklisp \
+    gcc \
+    devscripts \
+    build-essential \
+    fakeroot \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set up quicklisp for root user
+RUN sbcl --load /usr/share/cl-quicklisp/quicklisp.lisp \
+    --eval "(quicklisp-quickstart:install)" \
+    --eval "(ql:add-to-init-file)" \
+    --quit
+
+WORKDIR /build
+
+# Copy source files
+COPY . /build/
+
+# Build the .deb package
+RUN make clean && make deb
+
+# The .deb file will be in the parent directory after build
+CMD ["bash", "-c", "cp ../*.deb /output/ 2>/dev/null || echo 'Build complete. .deb files should be in parent directory'"]

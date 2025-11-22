@@ -1,0 +1,23 @@
+# Git
+.git
+.gitignore
+
+# Build artifacts
+*.deb
+*.changes
+*.buildinfo
+pconch
+build/
+.deps
+deb-output/
+
+# Docker
+Dockerfile
+Dockerfile.deb-builder
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
